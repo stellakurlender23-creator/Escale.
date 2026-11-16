@@ -9,25 +9,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #f7f4ed; color: #2c2a29; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
         
-        header { background: #efece4; border-bottom: 1px solid #e2ddd3; color: #2c2a29; padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        header { background: #efece4; border-bottom: 1px solid #e2ddd3; color: #2c2a29; padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 1000; }
         .logo { font-weight: 700; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
-        .header-right { display: flex; align-items: center; gap: 12px; }
         .user-avatar { width: 36px; height: 36px; background: #c5b59b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
 
-        .content { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 110px; display: none; }
+        .content { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 110px; display: none; max-width: 900px; width: 100%; margin: 0 auto; }
         .content.active { display: block; }
 
-        .hero-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 26px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
-        .hero-card h1 { font-size: 1.6rem; margin-bottom: 8px; color: #1a1918; font-weight: 600; }
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+        .hero-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 24px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
+        .hero-card h1 { font-size: 1.5rem; margin-bottom: 8px; color: #1a1918; font-weight: 600; }
         
-        .feature-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 22px; border-radius: 18px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .sub-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        
+        .feature-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 20px; border-radius: 18px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .feature-card:hover { border-color: #bfa88b; transform: translateY(-2px); }
-        .feature-card h3 { font-size: 1.15rem; margin-bottom: 8px; color: #1a1918; font-weight: 600; }
-        .feature-card p { font-size: 0.92rem; color: #767067; line-height: 1.5; }
-        .action-link { display: inline-block; margin-top: 14px; color: #8c7355; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .feature-card h3 { font-size: 1.1rem; margin-bottom: 6px; color: #1a1918; font-weight: 600; }
+        .feature-card p { font-size: 0.9rem; color: #767067; line-height: 1.4; }
+        .action-link { display: inline-block; margin-top: 10px; color: #8c7355; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; }
 
-        #map { width: 100%; height: calc(100vh - 250px); border-radius: 14px; min-height: 350px; margin-bottom: 15px; }
+        #map { width: 100%; height: calc(100vh - 260px); border-radius: 14px; min-height: 350px; margin-bottom: 15px; }
 
         input, button.btn { width: 100%; padding: 14px; margin-top: 10px; margin-bottom: 15px; background: #f4f0e8; border: 1px solid #ded6c8; border-radius: 12px; font-size: 1rem; color: #2c2a29; }
         input:focus { border-color: #8c7355; outline: none; background: #fff; }
@@ -36,18 +36,41 @@
 
         .music-player { background: #efece4; padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem; border: 1px solid #e2ddd3; }
 
+        .todo-item { display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 12px 16px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e7e2d7; }
+        .todo-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: #8c7355; margin: 0; }
+
+        /* Navigation adaptative selon l'écran */
         nav { display: flex; background: #efece4; border-top: 1px solid #e2ddd3; position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; z-index: 99999; }
-        nav button { flex: 1; background: none; border: none; font-size: 0.8rem; color: #767067; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; font-weight: 500; transition: color 0.2s; }
+        nav button { flex: 1; background: none; border: none; font-size: 0.75rem; color: #767067; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-weight: 500; }
         nav button.active { color: #8c7355; font-weight: 700; }
+
+        /* Adaptation pour ordinateurs / grands écrans (PC & Mac) */
+        @media (min-width: 768px) {
+            body { background-color: #efece4; }
+            header { padding: 20px 40px; border-bottom: 1px solid #ded6c8; }
+            .content { padding: 30px; max-width: 1000px; background: #f7f4ed; border-radius: 20px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); height: calc(100vh - 120px); overflow-y: auto; }
+            .sub-grid { grid-template-columns: repeat(3, 1fr); }
+            nav { position: static; width: 100%; border-top: none; border-bottom: 1px solid #e2ddd3; height: 60px; background: #ffffff; }
+            nav button { flex-direction: row; gap: 8px; font-size: 0.95rem; font-weight: 600; border-bottom: 3px solid transparent; }
+            nav button.active { border-bottom-color: #8c7355; background: #f7f4ed; }
+            body { flex-direction: column-reverse; } /* Place la nav en haut sur PC si souhaité, ou gère le flux */
+        }
     </style>
 </head>
 <body>
 
+    <!-- Barre de navigation (En haut sur PC, en bas sur Mobile) -->
+    <nav>
+        <button id="btn-accueil" class="active" onclick="switchTab('accueil')">✨ Accueil</button>
+        <button id="btn-plan" onclick="switchTab('plan')">📋 To-Do</button>
+        <button id="btn-carte" onclick="switchTab('carte')">🗺️ Hôtels</button>
+        <button id="btn-frais" onclick="switchTab('frais')">💶 Frais</button>
+        <button id="btn-profil" onclick="switchTab('profil')">👤 Profil</button>
+    </nav>
+
     <header>
         <div class="logo">✨ Escale</div>
-        <div class="header-right">
-            <div class="user-avatar" id="user-initial">S</div>
-        </div>
+        <div class="user-avatar" id="user-initial">S</div>
     </header>
 
     <!-- Onglet Accueil -->
@@ -59,27 +82,42 @@
         </div>
 
         <div class="hero-card">
-            <h1>Votre prochaine escapade</h1>
-            <p style="color: #767067; margin-bottom: 12px;">Détection GPS automatique • Séjour Premium</p>
-            <div style="font-size: 1.25rem; font-weight: 700; color: #5a7d61;">Cagnotte solde : +6,00 €</div>
+            <h1>Lisbonne • Prochain Voyage</h1>
+            <p style="color: #767067; margin-bottom: 10px;">2 voyageurs • Séjour Confirmé</p>
+            <div style="font-size: 1.2rem; font-weight: 700; color: #5a7d61;">Cagnotte solde : +6,00 €</div>
         </div>
 
         <div class="sub-grid">
-            <div class="feature-card" onclick="switchTab('frais')">
-                <h3>Diviser les frais</h3>
-                <p>Gestion élégante des dépenses communes et règlements automatiques entre proches.</p>
-                <span class="action-link">GÉRER →</span>
+            <div class="feature-card" onclick="switchTab('plan')">
+                <h3>Planifier & To-Do</h3>
+                <p>Gérez votre liste de tâches et les préparatifs de départ.</p>
+                <span class="action-link">ORGANISER →</span>
             </div>
             <div class="feature-card" onclick="switchTab('carte')">
-                <h3>Hôtels & Airbnb live</h3>
-                <p>Découvrez tous les hébergements disponibles autour de votre position géographique.</p>
+                <h3>Hôtels & Favoris</h3>
+                <p>Découvrez tous les hôtels et Airbnb géolocalisés avec vos favoris.</p>
                 <span class="action-link">VOIR LA CARTE →</span>
             </div>
-            <div class="feature-card" onclick="switchTab('rencontres')">
-                <h3>Faire connaissance</h3>
-                <p>Connectez-vous avec les voyageurs partageant votre destination.</p>
-                <span class="action-link">COMMUNAUTÉ →</span>
+            <div class="feature-card" onclick="switchTab('frais')">
+                <h3>Diviser les frais</h3>
+                <p>Suivi des dépenses communes entre voyageurs.</p>
+                <span class="action-link">GÉRER →</span>
             </div>
+        </div>
+    </div>
+
+    <!-- Onglet Planification & To-Do List -->
+    <div id="tab-plan" class="content">
+        <div class="hero-card">
+            <h2>To-Do List du Voyage</h2>
+            <div style="margin-top: 15px;">
+                <div class="todo-item"><input type="checkbox" checked> <span>Réserver l'hébergement à Lisbonne</span></div>
+                <div class="todo-item"><input type="checkbox"> <span>Acheter les billets d'avion</span></div>
+                <div class="todo-item"><input type="checkbox"> <span>Télécharger les cartes hors-ligne</span></div>
+                <div class="todo-item"><input type="checkbox"> <span>Préparer la valise & adaptateur secteur</span></div>
+            </div>
+            <input type="text" id="new-task" placeholder="Ajouter une tâche..." style="margin-top: 15px;">
+            <button class="btn" onclick="addTask()">Ajouter à la liste</button>
         </div>
     </div>
 
@@ -97,46 +135,31 @@
         </div>
     </div>
 
-    <!-- Onglet Carte & Logements Live -->
+    <!-- Onglet Carte & Hôtels Garantis -->
     <div id="tab-carte" class="content">
-        <div style="margin-bottom: 10px; font-size: 0.9rem; color: #767067;">📍 Recherche des hôtels et logements autour de vous...</div>
         <div id="map"></div>
-    </div>
-
-    <!-- Onglet Rencontres -->
-    <div id="tab-rencontres" class="content">
-        <div class="hero-card">
-            <h2>Voyageurs dans les environs</h2>
-            <p style="color: #767067; margin-bottom: 15px;">Membres actifs connectés près de votre position.</p>
-            <div style="background: #f4f0e8; padding: 14px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ded6c8;">
-                <span>✨ Thomas (À 300m)</span>
-                <button style="background: #8c7355; border: none; color: white; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor:pointer;" onclick="alert('Salutation envoyée à Thomas !')">Dire bonjour</button>
-            </div>
+        <div class="hero-card" style="margin-top: 15px;">
+            <h3>⭐ Vos Hôtels Favoris</h3>
+            <ul id="favorites-list" style="margin-top: 10px; padding-left: 20px; color: #767067;">
+                <li>Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !</li>
+            </ul>
         </div>
     </div>
 
     <!-- Onglet Profil -->
     <div id="tab-profil" class="content">
         <div class="hero-card">
-            <h2>Paramètres du Profil</h2>
+            <h2>Mon Profil</h2>
             <input type="text" id="user-name-input" value="Stella" placeholder="Votre prénom">
             <button class="btn" onclick="updateProfile()">Mettre à jour</button>
         </div>
     </div>
 
-    <!-- Barre de navigation -->
-    <nav>
-        <button id="btn-accueil" class="active" onclick="switchTab('accueil')">✨ Accueil</button>
-        <button id="btn-frais" onclick="switchTab('frais')">💶 Frais</button>
-        <button id="btn-carte" onclick="switchTab('carte')">🗺️ Hôtels</button>
-        <button id="btn-rencontres" onclick="switchTab('rencontres')">💬 Voyageurs</button>
-        <button id="btn-profil" onclick="switchTab('profil')">👤 Profil</button>
-    </nav>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
         let isPlaying = false;
+        let favorites = [];
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
@@ -163,53 +186,57 @@
             if (tabName === 'carte') {
                 setTimeout(() => {
                     if (!map) {
-                        map = L.map('map').setView([38.7223, -9.1393], 14); // Position par défaut (Lisbonne)
+                        map = L.map('map').setView([38.7223, -9.1393], 14);
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             maxZoom: 19,
                             attribution: '© OpenStreetMap'
                         }).addTo(map);
 
-                        // Récupération GPS réelle et chargement des hôtels alentour
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(position => {
-                                const lat = position.coords.latitude;
-                                const lng = position.coords.longitude;
-                                map.setView([lat, lng], 15);
-                                L.marker([lat, lng]).addTo(map).bindPopup("<b>📍 Vous êtes ici</b>").openPopup();
-                                
-                                // Charger les hôtels et hébergements autour de cette position
-                                loadNearbyHotels(lat, lng);
-                            }, () => {
-                                // Fallback si refus GPS
-                                loadNearbyHotels(38.7223, -9.1393);
-                            });
-                        } else {
-                            loadNearbyHotels(38.7223, -9.1393);
-                        }
+                        const hotels = [
+                            { name: "The Lumiares Hotel & Spa", type: "Hôtel 5★", lat: 38.7123, lng: -9.1433, price: "145€ / nuit" },
+                            { name: "Chic Alfama Design Loft", type: "Airbnb", lat: 38.7113, lng: -9.1313, price: "95€ / nuit" },
+                            { name: "Rossio Plaza Suites", type: "Hôtel Boutique", lat: 38.7138, lng: -9.1383, price: "110€ / nuit" },
+                            { name: "Bairro Alto Historic Apartment", type: "Airbnb", lat: 38.7153, lng: -9.1453, price: "80€ / nuit" }
+                        ];
+
+                        hotels.forEach(h => {
+                            L.marker([h.lat, h.lng]).addTo(map)
+                                .bindPopup(`<b>🏨 ${h.name}</b><br>${h.type} • ${h.price}<br><br><button style="background:#8c7355; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;" onclick="addFavorite('${h.name}', '${h.price}')">⭐ Ajouter aux favoris</button>`);
+                        });
                     }
                     map.invalidateSize();
                 }, 250);
             }
         }
 
-        function loadNearbyHotels(lat, lng) {
-            // Requête pour chercher les hôtels, auberges et logements dans un rayon de 2km
-            const query = `[out:json];(node["tourism"~"hotel|guest_house|hostel|apartment"](around:2000,${lat},${lng});way["tourism"~"hotel|guest_house|hostel|apartment"](around:2000,${lat},${lng}););out body;>;out skel qt;`;
-            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+        function addFavorite(name, price) {
+            if (!favorites.includes(name + " (" + price + ")")) {
+                favorites.push(name + " (" + price + ")");
+                updateFavoritesUI();
+                alert(name + " a été ajouté à vos favoris !");
+            } else {
+                alert("Cet établissement est déjà dans vos favoris.");
+            }
+        }
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    data.elements.forEach(element => {
-                        if (element.lat && element.lon) {
-                            const name = element.tags && element.tags.name ? element.tags.name : "Hôtel / Logement partenaire";
-                            const type = element.tags && element.tags.tourism ? element.tags.tourism : "hébergement";
-                            L.marker([element.lat, element.lon]).addTo(map)
-                                .bindPopup(`<b>🏨 ${name}</b><br>Type : ${type}<br><a href='#' onclick='alert("Réservation direct ouverte !")'>Réserver cet établissement</a>`);
-                        }
-                    });
-                })
-                .catch(err => console.log("Chargement des hôtels en cours..."));
+        function updateFavoritesUI() {
+            const list = document.getElementById('favorites-list');
+            if (favorites.length > 0) {
+                list.innerHTML = favorites.map(f => `<li>✨ ${f}</li>`).join('');
+            }
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('new-task');
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                const container = taskInput.parentElement;
+                const newItem = document.createElement('div');
+                newItem.className = 'todo-item';
+                newItem.innerHTML = `<input type="checkbox"> <span>${taskText}</span>`;
+                container.insertBefore(newItem, taskInput);
+                taskInput.value = '';
+            }
         }
 
         function addExpense() {
