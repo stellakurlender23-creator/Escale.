@@ -9,7 +9,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #f7f4ed; color: #2c2a29; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
         
-        /* En-tête Premium Beige & Or */
         header { background: #efece4; border-bottom: 1px solid #e2ddd3; color: #2c2a29; padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .logo { font-weight: 700; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
         .header-right { display: flex; align-items: center; gap: 12px; }
@@ -18,7 +17,6 @@
         .content { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 110px; display: none; }
         .content.active { display: block; }
 
-        /* Cartes Style Luxe */
         .hero-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 26px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
         .hero-card h1 { font-size: 1.6rem; margin-bottom: 8px; color: #1a1918; font-weight: 600; }
         .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
@@ -29,23 +27,15 @@
         .feature-card p { font-size: 0.92rem; color: #767067; line-height: 1.5; }
         .action-link { display: inline-block; margin-top: 14px; color: #8c7355; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px; }
 
-        /* Module Logements (Hôtels / Airbnb) */
-        .listing-card { background: #ffffff; border: 1px solid #e7e2d7; border-radius: 16px; padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .listing-info h4 { font-size: 1.05rem; color: #1a1918; margin-bottom: 4px; }
-        .listing-info p { font-size: 0.88rem; color: #767067; }
-        .listing-price { font-weight: 700; color: #8c7355; font-size: 1.1rem; text-align: right; }
-
-        #map { width: 100%; height: calc(100vh - 280px); border-radius: 14px; min-height: 300px; margin-bottom: 15px; }
+        #map { width: 100%; height: calc(100vh - 250px); border-radius: 14px; min-height: 350px; margin-bottom: 15px; }
 
         input, button.btn { width: 100%; padding: 14px; margin-top: 10px; margin-bottom: 15px; background: #f4f0e8; border: 1px solid #ded6c8; border-radius: 12px; font-size: 1rem; color: #2c2a29; }
         input:focus { border-color: #8c7355; outline: none; background: #fff; }
         button.btn { background: #8c7355; color: white; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
         button.btn:hover { background: #755f45; }
 
-        /* Lecteur de musique discret */
         .music-player { background: #efece4; padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem; border: 1px solid #e2ddd3; }
 
-        /* Barre de navigation inférieure */
         nav { display: flex; background: #efece4; border-top: 1px solid #e2ddd3; position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; z-index: 99999; }
         nav button { flex: 1; background: none; border: none; font-size: 0.8rem; color: #767067; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; font-weight: 500; transition: color 0.2s; }
         nav button.active { color: #8c7355; font-weight: 700; }
@@ -62,7 +52,6 @@
 
     <!-- Onglet Accueil -->
     <div id="tab-accueil" class="content active">
-        <!-- Lecteur Musique d'ambiance -->
         <div class="music-player">
             <span>🎶 Ambiance Voyage (Lofi Chill)</span>
             <button onclick="toggleMusic()" id="music-btn" style="background:#8c7355; color:white; border:none; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer;">Écouter</button>
@@ -71,7 +60,7 @@
 
         <div class="hero-card">
             <h1>Votre prochaine escapade</h1>
-            <p style="color: #767067; margin-bottom: 12px;">Lisbonne • 2 voyageurs • Séjour Premium</p>
+            <p style="color: #767067; margin-bottom: 12px;">Détection GPS automatique • Séjour Premium</p>
             <div style="font-size: 1.25rem; font-weight: 700; color: #5a7d61;">Cagnotte solde : +6,00 €</div>
         </div>
 
@@ -82,14 +71,14 @@
                 <span class="action-link">GÉRER →</span>
             </div>
             <div class="feature-card" onclick="switchTab('carte')">
-                <h3>Hôtels & Airbnb</h3>
-                <p>Sélection de logements d'exception géolocalisés autour de votre position.</p>
-                <span class="action-link">DÉCOUVRIR →</span>
+                <h3>Hôtels & Airbnb live</h3>
+                <p>Découvrez tous les hébergements disponibles autour de votre position géographique.</p>
+                <span class="action-link">VOIR LA CARTE →</span>
             </div>
             <div class="feature-card" onclick="switchTab('rencontres')">
                 <h3>Faire connaissance</h3>
                 <p>Connectez-vous avec les voyageurs partageant votre destination.</p>
-                <span class="action-link">VOIR LA COMMUNAUTÉ →</span>
+                <span class="action-link">COMMUNAUTÉ →</span>
             </div>
         </div>
     </div>
@@ -108,35 +97,19 @@
         </div>
     </div>
 
-    <!-- Onglet Carte & Logements -->
+    <!-- Onglet Carte & Logements Live -->
     <div id="tab-carte" class="content">
+        <div style="margin-bottom: 10px; font-size: 0.9rem; color: #767067;">📍 Recherche des hôtels et logements autour de vous...</div>
         <div id="map"></div>
-        <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Logements suggérés à proximité</h3>
-        <div id="listings-container">
-            <div class="listing-card">
-                <div class="listing-info">
-                    <h4>The Lumiares Hotel & Spa (Hôtel 5★)</h4>
-                    <p>⭐ 4.9 (Bairro Alto) • À 250m de vous</p>
-                </div>
-                <div class="listing-price">145€<br><span style="font-size:0.75rem; color:#767067;">par nuit</span></div>
-            </div>
-            <div class="listing-card">
-                <div class="listing-info">
-                    <h4>Chic Alfama Design Loft (Airbnb)</h4>
-                    <p>⭐ 4.8 (Vue panoramique) • À 600m de vous</p>
-                </div>
-                <div class="listing-price">95€<br><span style="font-size:0.75rem; color:#767067;">par nuit</span></div>
-            </div>
-        </div>
     </div>
 
     <!-- Onglet Rencontres -->
     <div id="tab-rencontres" class="content">
         <div class="hero-card">
             <h2>Voyageurs dans les environs</h2>
-            <p style="color: #767067; margin-bottom: 15px;">Membres actifs d'Escale connectés à Lisbonne.</p>
+            <p style="color: #767067; margin-bottom: 15px;">Membres actifs connectés près de votre position.</p>
             <div style="background: #f4f0e8; padding: 14px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ded6c8;">
-                <span>✨ Thomas (À 300m - Goûte un pastel de nata)</span>
+                <span>✨ Thomas (À 300m)</span>
                 <button style="background: #8c7355; border: none; color: white; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor:pointer;" onclick="alert('Salutation envoyée à Thomas !')">Dire bonjour</button>
             </div>
         </div>
@@ -190,28 +163,53 @@
             if (tabName === 'carte') {
                 setTimeout(() => {
                     if (!map) {
-                        map = L.map('map').setView([38.7223, -9.1393], 14);
+                        map = L.map('map').setView([38.7223, -9.1393], 14); // Position par défaut (Lisbonne)
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             maxZoom: 19,
                             attribution: '© OpenStreetMap'
                         }).addTo(map);
 
-                        // Marqueurs Hôtels & Airbnb stylés
-                        L.marker([38.7243, -9.1393]).addTo(map).bindPopup("<b>The Lumiares Hotel</b><br>145€ / nuit");
-                        L.marker([38.7203, -9.1423]).addTo(map).bindPopup("<b>Chic Alfama Loft (Airbnb)</b><br>95€ / nuit");
-
+                        // Récupération GPS réelle et chargement des hôtels alentour
                         if (navigator.geolocation) {
                             navigator.geolocation.getCurrentPosition(position => {
                                 const lat = position.coords.latitude;
                                 const lng = position.coords.longitude;
-                                map.setView([lat, lng], 14);
-                                L.marker([lat, lng]).addTo(map).bindPopup("<b>Votre position actuelle</b>").openPopup();
+                                map.setView([lat, lng], 15);
+                                L.marker([lat, lng]).addTo(map).bindPopup("<b>📍 Vous êtes ici</b>").openPopup();
+                                
+                                // Charger les hôtels et hébergements autour de cette position
+                                loadNearbyHotels(lat, lng);
+                            }, () => {
+                                // Fallback si refus GPS
+                                loadNearbyHotels(38.7223, -9.1393);
                             });
+                        } else {
+                            loadNearbyHotels(38.7223, -9.1393);
                         }
                     }
                     map.invalidateSize();
                 }, 250);
             }
+        }
+
+        function loadNearbyHotels(lat, lng) {
+            // Requête pour chercher les hôtels, auberges et logements dans un rayon de 2km
+            const query = `[out:json];(node["tourism"~"hotel|guest_house|hostel|apartment"](around:2000,${lat},${lng});way["tourism"~"hotel|guest_house|hostel|apartment"](around:2000,${lat},${lng}););out body;>;out skel qt;`;
+            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.elements.forEach(element => {
+                        if (element.lat && element.lon) {
+                            const name = element.tags && element.tags.name ? element.tags.name : "Hôtel / Logement partenaire";
+                            const type = element.tags && element.tags.tourism ? element.tags.tourism : "hébergement";
+                            L.marker([element.lat, element.lon]).addTo(map)
+                                .bindPopup(`<b>🏨 ${name}</b><br>Type : ${type}<br><a href='#' onclick='alert("Réservation direct ouverte !")'>Réserver cet établissement</a>`);
+                        }
+                    });
+                })
+                .catch(err => console.log("Chargement des hôtels en cours..."));
         }
 
         function addExpense() {
@@ -228,7 +226,7 @@
         }
 
         function updateProfile() {
-            const name = document.getElementById('user-name-input-input') || document.getElementById('user-name-input').value;
+            const name = document.getElementById('user-name-input').value;
             if(name) {
                 document.getElementById('user-initial').innerText = name.charAt(0).toUpperCase();
                 alert('Profil mis à jour avec élégance !');
