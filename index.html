@@ -82,4 +82,103 @@
         <div class="hero-card">
             <h2>Gestion des Dépenses</h2>
             <input type="text" id="expense-name" placeholder="Nom de la dépense (ex: Hôtel)">
-            <input type="number" id="expense
+            <input type="number" id="expense-amount" placeholder="Montant en €">
+            <button class="btn" onclick="addExpense()">Ajouter la dépense</button>
+        </div>
+        <div class="hero-card">
+            <h3>Soldes actuels</h3>
+            <p id="balance-display" style="margin-top: 10px; color: #aaa;">Aucune dépense pour l'instant.</p>
+        </div>
+    </div>
+
+    <!-- Onglet Carte (Hôtels & Position) -->
+    <div id="tab-carte" class="content">
+        <div id="map"></div>
+    </div>
+
+    <!-- Onglet Voyageurs / Rencontres -->
+    <div id="tab-rencontres" class="content">
+        <div class="hero-card">
+            <h2>Voyageurs à proximité</h2>
+            <p style="color: #aaa; margin-bottom: 15px;">Basé sur votre géolocalisation GPS.</p>
+            <div style="background: #252525; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <span>👋 Thomas (à 300m)</span>
+                <button style="background: #007AFF; border: none; color: white; padding: 6px 12px; border-radius: 6px;" onclick="alert('Message envoyé à Thomas !')">Dire bonjour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onglet Profil -->
+    <div id="tab-profil" class="content">
+        <div class="hero-card">
+            <h2>Mon Profil</h2>
+            <input type="text" id="user-name-input" value="Stella" placeholder="Votre prénom">
+            <button class="btn" onclick="updateProfile()">Enregistrer</button>
+        </div>
+    </div>
+
+    <!-- Barre de navigation -->
+    <nav>
+        <button class="active" onclick="switchTab('accueil', this)">🏠 Accueil</button>
+        <button onclick="switchTab('frais', this)">💶 Frais</button>
+        <button onclick="switchTab('carte', this)">🗺️ Carte</button>
+        <button onclick="switchTab('rencontres', this)">💬 Voyageurs</button>
+        <button onclick="switchTab('profil', this)">👤 Profil</button>
+    </nav>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map;
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).classList.add('active');
+            btn.classList.add('active');
+
+            if (tabName === 'carte' && !map) {
+                setTimeout(() => {
+                    map = L.map('map').setView([48.8566, 2.3522], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '© OpenStreetMap'
+                    }).addTo(map);
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            map.setView([lat, lng], 14);
+                            L.marker([lat, lng]).addTo(map).bindPopup("Vous êtes ici !").openPopup();
+                            
+                            // Exemple d'hôtel fictif autour
+                            L.marker([lat + 0.002, lng + 0.002]).addTo(map).bindPopup("<b>Hôtel Lisboa Plaza</b><br>85€ / nuit");
+                        });
+                    }
+                    map.invalidateSize();
+                }, 200);
+            } else if (tabName === 'carte' && map) {
+                setTimeout(() => map.invalidateSize(), 200);
+            }
+        }
+
+        function addExpense() {
+            const name = document.getElementById('expense-name').value;
+            const amount = document.getElementById('expense-amount').value;
+            if(name && amount) {
+                document.getElementById('balance-displayinnerText = `Dernière dépense : ${name} (${amount}€)`;
+                document.getElementById('expense-name').value = '';
+                document.getElementById('expense-amount').value = '';
+            }
+        }
+
+        function updateProfile() {
+            const name = document.getElementById('user-name-input').value;
+            if(name) {
+                document.getElementById('user-initial').innerText = name.charAt(0).toUpperCase();
+                alert('Profil mis à jour !');
+            }
+        }
+    </script>
+</body>
+</html>
