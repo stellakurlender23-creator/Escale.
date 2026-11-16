@@ -1,173 +1,267 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Escale - Luxury Travel</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #f7f4ed; color: #2c2a29; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
-        
-        header { background: #efece4; border-bottom: 1px solid #e2ddd3; color: #2c2a29; padding: 14px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 1000; }
-        .logo { font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
-        .user-avatar { width: 34px; height: 34px; background: #c5b59b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+        :root {
+            --bg-color: #f7f4ed;
+            --header-bg: #efece4;
+            --text-color: #2c2a29;
+            --card-bg: #ffffff;
+            --border-color: #e7e2d7;
+            --input-bg: #f4f0e8;
+            --primary: #8c7355;
+            --primary-hover: #755f45;
+            --muted: #767067;
+        }
 
-        /* Contenu principal adaptatif paysage / portrait */
-        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; display: none; max-width: 1200px; width: 100%; margin: 0 auto; }
+        body.dark-mode {
+            --bg-color: #121212;
+            --header-bg: #1a1a1a;
+            --text-color: #f1f1f1;
+            --card-bg: #1e1e1e;
+            --border-color: #2a2a2a;
+            --input-bg: #252525;
+            --primary: #007AFF;
+            --primary-hover: #005ec4;
+            --muted: #aaa;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; transition: background 0.3s, color 0.3s; }
+        
+        header { background: var(--header-bg); border-bottom: 1px solid var(--border-color); color: var(--text-color); padding: 14px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 1000; }
+        .logo { font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+        .control-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 600; }
+        
+        .user-avatar { width: 34px; height: 34px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+
+        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; display: none; max-width: 1400px; width: 100%; margin: 0 auto; }
         .content.active { display: block; }
 
-        .hero-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 22px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
-        .hero-card h1 { font-size: 1.4rem; margin-bottom: 6px; color: #1a1918; font-weight: 600; }
+        .hero-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 22px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
+        .hero-card h1 { font-size: 1.4rem; margin-bottom: 6px; color: var(--text-color); font-weight: 600; }
         
         .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         
-        .feature-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .feature-card:hover { border-color: #bfa88b; transform: translateY(-2px); }
-        .feature-card h3 { font-size: 1.1rem; margin-bottom: 6px; color: #1a1918; font-weight: 600; }
-        .feature-card p { font-size: 0.88rem; color: #767067; line-height: 1.4; }
-        .action-link { display: inline-block; margin-top: 10px; color: #8c7355; font-weight: 700; font-size: 0.85rem; }
+        .feature-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .feature-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .feature-card h3 { font-size: 1.1rem; margin-bottom: 6px; color: var(--text-color); font-weight: 600; }
+        .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+        .action-link { display: inline-block; margin-top: 10px; color: var(--primary); font-weight: 700; font-size: 0.85rem; }
 
-        /* Carte optimisée pour le mode paysage */
-        #map { width: 100%; height: calc(100vh - 220px); border-radius: 14px; min-height: 380px; margin-bottom: 15px; }
+        #map { width: 100%; height: calc(100vh - 280px); border-radius: 14px; min-height: 380px; margin-bottom: 15px; }
 
-        input, button.btn { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 12px; background: #f4f0e8; border: 1px solid #ded6c8; border-radius: 10px; font-size: 0.95rem; color: #2c2a29; }
-        input:focus { border-color: #8c7355; outline: none; background: #fff; }
-        button.btn { background: #8c7355; color: white; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        button.btn:hover { background: #755f45; }
+        input, select, button.btn { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-color); }
+        input:focus, select:focus { border-color: var(--primary); outline: none; background: var(--card-bg); }
+        button.btn { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button.btn:hover { background: var(--primary-hover); }
 
-        .music-player { background: #efece4; padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid #e2ddd3; }
+        .music-player { background: var(--header-bg); padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid var(--border-color); }
 
-        .todo-item { display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; border: 1px solid #e7e2d7; font-size: 0.90rem; }
-        .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #8c7355; margin: 0; }
+        .todo-item { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border-color); font-size: 0.90rem; }
+        .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); margin: 0; }
 
-        /* Barre de navigation fixée en bas pour le tactile / tablette */
-        nav { display: flex; background: #efece4; border-top: 1px solid #e2ddd3; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; z-index: 99999; }
-        nav button { flex: 1; background: none; border: none; font-size: 0.75rem; color: #767067; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-weight: 500; }
-        nav button.active { color: #8c7355; font-weight: 700; }
+        nav { display: flex; background: var(--header-bg); border-top: 1px solid var(--border-color); position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; z-index: 99999; }
+        nav button { flex: 1; background: none; border: none; font-size: 0.75rem; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-weight: 500; }
+        nav button.active { color: var(--primary); font-weight: 700; }
 
-        /* MEDIA QUERY SPÉCIFIQUE IPAD PAYSAGE & TABLETTES */
-        @media (min-width: 1024px) and (orientation: landscape) {
-            .content { padding: 30px 40px; }
+        @media (min-width: 1024px) {
+            body { flex-direction: row-reverse; }
+            nav { position: static; width: 90px; height: 100vh; flex-direction: column; border-top: none; border-left: 1px solid var(--border-color); }
+            nav button { height: 20%; font-size: 0.8rem; }
+            .content { padding: 30px; height: 100vh; overflow-y: auto; }
             .sub-grid { grid-template-columns: repeat(3, 1fr); }
-            #map { height: calc(100vh - 200px); }
+            #map { height: calc(100vh - 240px); }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">✨ Escale</div>
-        <div class="user-avatar" id="user-initial">S</div>
-    </header>
-
-    <!-- Onglet Accueil -->
-    <div id="tab-accueil" class="content active">
-        <div class="music-player">
-            <span>🎶 Ambiance Voyage (Lofi Chill)</span>
-            <button onclick="toggleMusic()" id="music-btn" style="background:#8c7355; color:white; border:none; padding:6px 14px; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer;">Écouter</button>
-            <audio id="bg-music" loop src="https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg"></audio>
-        </div>
-
-        <div class="hero-card">
-            <h1>Lisbonne • Prochain Voyage</h1>
-            <p style="color: #767067; margin-bottom: 8px;">2 voyageurs • Séjour Confirmé</p>
-            <div style="font-size: 1.15rem; font-weight: 700; color: #5a7d61;">Cagnotte solde : +6,00 €</div>
-        </div>
-
-        <div class="sub-grid">
-            <div class="feature-card" onclick="switchTab('plan')">
-                <h3>Planifier & To-Do</h3>
-                <p>Gérez votre liste de tâches et les préparatifs de départ.</p>
-                <span class="action-link">ORGANISER →</span>
-            </div>
-            <div class="feature-card" onclick="switchTab('carte')">
-                <h3>Hôtels & Favoris</h3>
-                <p>Découvrez tous les hôtels et Airbnb géolocalisés avec vos favoris.</p>
-                <span class="action-link">VOIR LA CARTE →</span>
-            </div>
-            <div class="feature-card" onclick="switchTab('frais')">
-                <h3>Diviser les frais</h3>
-                <p>Suivi des dépenses communes entre voyageurs.</p>
-                <span class="action-link">GÉRER →</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Onglet Planification & To-Do List -->
-    <div id="tab-plan" class="content">
-        <div class="hero-card">
-            <h2>To-Do List du Voyage</h2>
-            <div style="margin-top: 12px;">
-                <div class="todo-item"><input type="checkbox" checked> <span>Réserver l'hébergement à Lisbonne</span></div>
-                <div class="todo-item"><input type="checkbox"> <span>Acheter les billets d'avion</span></div>
-                <div class="todo-item"><input type="checkbox"> <span>Télécharger les cartes hors-ligne</span></div>
-                <div class="todo-item"><input type="checkbox"> <span>Préparer la valise & adaptateur secteur</span></div>
-            </div>
-            <input type="text" id="new-task" placeholder="Ajouter une tâche..." style="margin-top: 12px;">
-            <button class="btn" onclick="addTask()">Ajouter à la liste</button>
-        </div>
-    </div>
-
-    <!-- Onglet Frais -->
-    <div id="tab-frais" class="content">
-        <div class="hero-card">
-            <h2>Notes & Dépenses Partagées</h2>
-            <input type="text" id="expense-name" placeholder="Libellé (ex: Dîner Rooftop)">
-            <input type="number" id="expense-amount" placeholder="Montant en €">
-            <button class="btn" onclick="addExpense()">Ajouter à la cagnotte</button>
-        </div>
-        <div class="hero-card">
-            <h3>Synthèse des comptes</h3>
-            <p id="balance-display" style="margin-top: 8px; color: #767067;">Aucune dépense enregistrée.</p>
-        </div>
-    </div>
-
-    <!-- Onglet Carte & Hôtels Garantis -->
-    <div id="tab-carte" class="content">
-        <div id="map"></div>
-        <div class="hero-card" style="margin-top: 10px;">
-            <h3>⭐ Vos Hôtels Favoris</h3>
-            <ul id="favorites-list" style="margin-top: 8px; padding-left: 20px; color: #767067; font-size: 0.9rem;">
-                <li>Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Onglet Profil -->
-    <div id="tab-profil" class="content">
-        <div class="hero-card">
-            <h2>Mon Profil</h2>
-            <input type="text" id="user-name-input" value="Stella" placeholder="Votre prénom">
-            <button class="btn" onclick="updateProfile()">Mettre à jour</button>
-        </div>
-    </div>
-
-    <!-- Barre de navigation -->
     <nav>
-        <button id="btn-accueil" class="active" onclick="switchTab('accueil')">✨ Accueil</button>
-        <button id="btn-plan" onclick="switchTab('plan')">📋 To-Do</button>
-        <button id="btn-carte" onclick="switchTab('carte')">🗺️ Hôtels</button>
-        <button id="btn-frais" onclick="switchTab('frais')">💶 Frais</button>
-        <button id="btn-profil" onclick="switchTab('profil')">👤 Profil</button>
+        <button id="nav-home" class="active" onclick="switchTab('accueil')">✨ <span data-i18n="home">Accueil</span></button>
+        <button id="nav-trip" onclick="switchTab('nouveau')">✈️ <span data-i18n="trip">Voyage</span></button>
+        <button id="nav-map" onclick="switchTab('carte')">🗺️ <span data-i18n="hotels">Hôtels</span></button>
+        <button id="nav-todo" onclick="switchTab('plan')">📋 <span data-i18n="todo">To-Do</span></button>
+        <button id="nav-profile" onclick="switchTab('profil')">👤 <span data-i18n="profile">Profil</span></button>
     </nav>
+
+    <div style="flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
+        <header>
+            <div class="logo">✨ Escale</div>
+            <div class="header-controls">
+                <button class="control-btn" onclick="toggleTheme()" id="theme-toggle">🌙 Sombre</button>
+                <button class="control-btn" onclick="toggleLanguage()" id="lang-toggle">🇬🇧 EN</button>
+                <div class="user-avatar" id="user-initial">S</div>
+            </div>
+        </header>
+
+        <!-- Accueil -->
+        <div id="tab-accueil" class="content active">
+            <div class="music-player">
+                <span data-i18n="music">🎶 Ambiance Voyage (Lofi Chill)</span>
+                <button onclick="toggleMusic()" id="music-btn" class="control-btn" style="background:var(--primary); color:white; border:none;">Écouter</button>
+                <audio id="bg-music" loop src="https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg"></audio>
+            </div>
+
+            <div class="hero-card">
+                <h1 id="current-trip-title">Lisbonne • Prochain Voyage</h1>
+                <p id="current-trip-details" style="color: var(--muted); margin-bottom: 8px;">2 voyageurs • Séjour Confirmé</p>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #5a7d61;" data-i18n="balance">Cagnotte solde : +6,00 €</div>
+            </div>
+
+            <div class="sub-grid">
+                <div class="feature-card" onclick="switchTab('nouveau')">
+                    <h3 data-i18n="card1_title">✈️ Programmer un voyage</h3>
+                    <p data-i18n="card1_desc">Recherchez n'importe quelle destination dans le monde entier.</p>
+                    <span class="action-link" data-i18n="create">CRÉER →</span>
+                </div>
+                <div class="feature-card" onclick="switchTab('carte')">
+                    <h3 data-i18n="card2_title">🗺️ Hôtels & Favoris</h3>
+                    <p data-i18n="card2_desc">Hôtels et Airbnb géolocalisés de votre destination en temps réel.</p>
+                    <span class="action-link" data-i18n="view_map">VOIR LA CARTE →</span>
+                </div>
+                <div class="feature-card" onclick="switchTab('plan')">
+                    <h3 data-i18n="card3_title">📋 To-Do & Frais</h3>
+                    <p data-i18n="card3_desc">Gérez vos tâches et le partage des dépenses.</p>
+                    <span class="action-link" data-i18n="organize">ORGANISER →</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nouveau Voyage -->
+        <div id="tab-nouveau" class="content">
+            <div class="hero-card">
+                <h2 data-i18n="explore_world">Explorer le Monde Entier</h2>
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600;" data-i18n="search_label">Tapez n'importe quelle ville ou pays du monde</label>
+                <input type="text" id="world-destination" placeholder="Ex: Tokyo, New York, Bali..." value="Tokyo">
+
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="dates_label">Dates du séjour</label>
+                <input type="text" id="trip-dates" value="10 au 20 Juillet 2026">
+
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="travelers_label">Nombre de voyageurs</label>
+                <input type="number" id="trip-travelers" value="2" min="1" max="10">
+
+                <button class="btn" onclick="searchWorldDestination()" style="margin-top: 15px;" data-i18n="validate_btn">Valider et générer les hébergements</button>
+            </div>
+        </div>
+
+        <!-- To-Do & Frais -->
+        <div id="tab-plan" class="content">
+            <div class="hero-card">
+                <h2 data-i18n="todo_title">To-Do List & Frais partagés</h2>
+                <div style="margin-top: 12px; margin-bottom: 20px;">
+                    <div class="todo-item"><input type="checkbox" checked> <span data-i18n="task1">Réserver l'hébergement</span></div>
+                    <div class="todo-item"><input type="checkbox"> <span data-i18n="task2">Acheter les billets de transport</span></div>
+                    <div class="todo-item"><input type="checkbox"> <span data-i18n="task3">Préparer la valise</span></div>
+                </div>
+                <input type="text" id="new-task" placeholder="Ajouter une tâche...">
+                <button class="btn" onclick="addTask()" data-i18n="add_task">Ajouter à la liste</button>
+            </div>
+            <div class="hero-card">
+                <h2 data-i18n="expenses_title">Dépenses</h2>
+                <input type="text" id="expense-name" placeholder="Libellé (ex: Hôtel)">
+                <input type="number" id="expense-amount" placeholder="Montant en €">
+                <button class="btn" onclick="addExpense()" data-i18n="add_expense">Ajouter à la cagnotte</button>
+                <p id="balance-display" style="margin-top: 10px; color: var(--muted);" data-i18n="no_expense">Aucune dépense enregistrée.</p>
+            </div>
+        </div>
+
+        <!-- Carte -->
+        <div id="tab-carte" class="content">
+            <div id="map"></div>
+            <div class="hero-card" style="margin-top: 10px;">
+                <h3 data-i18n="favorites_title">⭐ Vos Hôtels Favoris</h3>
+                <ul id="favorites-list" style="margin-top: 8px; padding-left: 20px; color: var(--muted); font-size: 0.9rem;">
+                    <li data-i18n="no_favorites">Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Profil -->
+        <div id="tab-profil" class="content">
+            <div class="hero-card">
+                <h2 data-i18n="profile_title">Mon Profil</h2>
+                <input type="text" id="user-name-input" value="Stella" placeholder="Votre prénom">
+                <button class="btn" onclick="updateProfile()" data-i18n="update_btn">Mettre à jour</button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
+        let markersLayer = null;
         let isPlaying = false;
         let favorites = [];
+        let currentLang = 'fr';
+        let isDarkMode = false;
+
+        const translations = {
+            fr: {
+                home: "Accueil", trip: "Voyage", hotels: "Hôtels", todo: "To-Do", profile: "Profil",
+                music: "🎶 Ambiance Voyage (Lofi Chill)", balance: "Cagnotte solde : +6,00 €",
+                card1_title: "✈️ Programmer un voyage", card1_desc: "Recherchez n'importe quelle destination dans le monde entier.", create: "CRÉER →",
+                card2_title: "🗺️ Hôtels & Favoris", card2_desc: "Hôtels et Airbnb géolocalisés de votre destination en temps réel.", view_map: "VOIR LA CARTE →",
+                card3_title: "📋 To-Do & Frais", card3_desc: "Gérez vos tâches et le partage des dépenses.", organize: "ORGANISER →",
+                explore_world: "Explorer le Monde Entier", search_label: "Tapez n'importe quelle ville ou pays du monde",
+                dates_label: "Dates du séjour", travelers_label: "Nombre de voyageurs", validate_btn: "Valider et générer les hébergements",
+                todo_title: "To-Do List & Frais partagés", task1: "Réserver l'hébergement", task2: "Acheter les billets de transport", task3: "Préparer la valise",
+                add_task: "Ajouter à la liste", expenses_title: "Dépenses", add_expense: "Ajouter à la cagnotte", no_expense: "Aucune dépense enregistrée.",
+                favorites_title: "⭐ Vos Hôtels Favoris", no_favorites: "Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !",
+                profile_title: "Mon Profil", update_btn: "Mettre à jour", theme_dark: "🌙 Sombre", theme_light: "☀️ Clair"
+            },
+            en: {
+                home: "Home", trip: "Trip", hotels: "Hotels", todo: "To-Do", profile: "Profile",
+                music: "🎶 Travel Vibe (Lofi Chill)", balance: "Wallet Balance: +€6.00",
+                card1_title: "✈️ Plan a Trip", card1_desc: "Search for any destination worldwide.", create: "CREATE →",
+                card2_title: "🗺️ Hotels & Favorites", card2_desc: "Geolocated hotels and Airbnbs in real time.", view_map: "VIEW MAP →",
+                card3_title: "📋 To-Do & Expenses", card3_desc: "Manage your tasks and split expenses.", organize: "ORGANIZE →",
+                explore_world: "Explore the World", search_label: "Type any city or country in the world",
+                dates_label: "Trip Dates", travelers_label: "Number of Travelers", validate_btn: "Validate & Generate Accommodations",
+                todo_title: "To-Do List & Shared Expenses", task1: "Book accommodation", task2: "Buy transport tickets", task3: "Pack luggage",
+                add_task: "Add to list", expenses_title: "Expenses", add_expense: "Add to wallet", no_expense: "No expenses recorded.",
+                favorites_title: "⭐ Your Favorite Hotels", no_favorites: "No favorites yet. Click on a hotel on the map to add it!",
+                profile_title: "My Profile", update_btn: "Update", theme_dark: "🌙 Dark", theme_light: "☀️ Light"
+            }
+        };
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.getElementById('theme-toggle').innerText = isDarkMode ? translations[currentLang].theme_light : translations[currentLang].theme_dark;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            document.getElementById('lang-toggle').innerText = currentLang === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR';
+            document.getElementById('theme-toggle').innerText = isDarkMode ? translations[currentLang].theme_light : translations[currentLang].theme_dark;
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
+                }
+            });
+        }
+
+        let currentTrip = { city: "Lisbonne", lat: 38.7223, lng: -9.1393, dates: "20 au 27 Juin 2026", travelers: 2 };
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
             const btn = document.getElementById('music-btn');
             if (isPlaying) {
                 audio.pause();
-                btn.innerText = "Écouter";
+                btn.innerText = currentLang === 'fr' ? "Écouter" : "Play";
                 isPlaying = false;
             } else {
                 audio.play();
-                btn.innerText = "Pause ⏸";
+                btn.innerText = currentLang === 'fr' ? "Pause ⏸" : "Pause ⏸";
                 isPlaying = true;
             }
         }
@@ -177,60 +271,95 @@
             document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
             
             document.getElementById('tab-' + tabName).classList.add('active');
-            const targetBtn = document.getElementById('btn-' + tabName);
+            
+            const btnMap = { 'accueil': 'nav-home', 'nouveau': 'nav-trip', 'carte': 'nav-map', 'plan': 'nav-todo', 'profil': 'nav-profile' };
+            const targetBtn = document.getElementById(btnMap[tabName]);
             if (targetBtn) targetBtn.classList.add('active');
 
             if (tabName === 'carte') {
                 setTimeout(() => {
                     if (!map) {
-                        map = L.map('map').setView([38.7223, -9.1393], 14);
+                        map = L.map('map').setView([currentTrip.lat, currentTrip.lng], 13);
                         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             maxZoom: 19,
                             attribution: '© OpenStreetMap'
                         }).addTo(map);
-
-                        const hotels = [
-                            { name: "The Lumiares Hotel & Spa", type: "Hôtel 5★", lat: 38.7123, lng: -9.1433, price: "145€ / nuit" },
-                            { name: "Chic Alfama Design Loft", type: "Airbnb", lat: 38.7113, lng: -9.1313, price: "95€ / nuit" },
-                            { name: "Rossio Plaza Suites", type: "Hôtel Boutique", lat: 38.7138, lng: -9.1383, price: "110€ / nuit" },
-                            { name: "Bairro Alto Historic Apartment", type: "Airbnb", lat: 38.7153, lng: -9.1453, price: "80€ / nuit" }
-                        ];
-
-                        hotels.forEach(h => {
-                            L.marker([h.lat, h.lng]).addTo(map)
-                                .bindPopup(`<b>🏨 ${h.name}</b><br>${h.type} • ${h.price}<br><br><button style="background:#8c7355; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;" onclick="addFavorite('${h.name}', '${h.price}')">⭐ Ajouter aux favoris</button>`);
-                        });
+                    } else {
+                        map.setView([currentTrip.lat, currentTrip.lng], 13);
                     }
+                    fetchWorldHotels(currentTrip.lat, currentTrip.lng);
                     map.invalidateSize();
                 }, 250);
             }
         }
 
-        function addFavorite(name, price) {
-            if (!favorites.includes(name + " (" + price + ")")) {
-                favorites.push(name + " (" + price + ")");
-                updateFavoritesUI();
-                alert(name + " a été ajouté à vos favoris !");
-            } else {
-                alert("Cet établissement est déjà dans vos favoris.");
-            }
+        function searchWorldDestination() {
+            const query = document.getElementById('world-destination').value.trim();
+            if(!query) return alert(currentLang === 'fr' ? 'Veuillez entrer une destination.' : 'Please enter a destination.');
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if(data && data.length > 0) {
+                        currentTrip.city = query.charAt(0).toUpperCase() + query.slice(1);
+                        currentTrip.lat = parseFloat(data[0].lat);
+                        currentTrip.lng = parseFloat(data[0].lon);
+                        currentTrip.dates = document.getElementById('trip-dates').value;
+                        currentTrip.travelers = document.getElementById('trip-travelers').value;
+
+                        document.getElementById('current-trip-title').innerText = `${currentTrip.city} • ${currentLang === 'fr' ? 'Voyage Programmé' : 'Planned Trip'}`;
+                        document.getElementById('current-trip-details').innerText = `${currentTrip.travelers} ${currentLang === 'fr' ? 'voyageurs' : 'travelers'} • ${currentTrip.dates}`;
+
+                        alert(currentLang === 'fr' ? `Destination ${currentTrip.city} trouvée et enregistrée !` : `Destination ${currentTrip.city} found and saved!`);
+                        switchTab('carte');
+                    } else {
+                        alert(currentLang === 'fr' ? 'Destination introuvable.' : 'Destination not found.');
+                    }
+                })
+                .catch(() => alert('Erreur.'));
         }
 
-        function updateFavoritesUI() {
-            const list = document.getElementById('favorites-list');
-            if (favorites.length > 0) {
-                list.innerHTML = favorites.map(f => `<li>✨ ${f}</li>`).join('');
+        function fetchWorldHotels(lat, lng) {
+            if (!map) return;
+            if (markersLayer) map.removeLayer(markersLayer);
+            markersLayer = L.layerGroup().addTo(map);
+
+            L.marker([lat, lng]).addTo(markersLayer).bindPopup(`<b>📍 ${currentTrip.city}</b>`).openPopup();
+
+            const query = `[out:json];(node["tourism"~"hotel|guest_house|hostel|apartment"](around:3000,${lat},${lng});way["tourism"~"hotel|guest_house|hostel|apartment"](around:3000,${lat},${lng}););out body;>;out skel qt;`;
+            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.elements && data.elements.length > 0) {
+                        data.elements.forEach(element => {
+                            if (element.lat && element.lon) {
+                                const name = element.tags && element.tags.name ? element.tags.name : "Hôtel / Airbnb";
+                                L.marker([element.lat, element.lon]).addTo(markersLayer)
+                                    .bindPopup(`<b>🏨 ${name}</b><br><button class="btn" style="padding:6px; margin-top:5px;" onclick="addFavorite('${name}', 'Live')">⭐ ${currentLang === 'fr' ? 'Favoris' : 'Favorite'}</button>`);
+                            }
+                        });
+                    }
+                })
+                .catch(() => {});
+        }
+
+        function addFavorite(name, price) {
+            if (!favorites.includes(name)) {
+                favorites.push(name);
+                document.getElementById('favorites-list').innerHTML = favorites.map(f => `<li>✨ ${f}</li>`).join('');
+                alert(currentLang === 'fr' ? 'Ajouté aux favoris !' : 'Added to favorites!');
             }
         }
 
         function addTask() {
             const taskInput = document.getElementById('new-task');
-            const taskText = taskInput.value.trim();
-            if (taskText) {
+            if (taskInput.value.trim()) {
                 const container = taskInput.parentElement;
                 const newItem = document.createElement('div');
                 newItem.className = 'todo-item';
-                newItem.innerHTML = `<input type="checkbox"> <span>${taskText}</span>`;
+                newItem.innerHTML = `<input type="checkbox"> <span>${taskInput.value}</span>`;
                 container.insertBefore(newItem, taskInput);
                 taskInput.value = '';
             }
@@ -240,12 +369,9 @@
             const name = document.getElementById('expense-name').value;
             const amount = document.getElementById('expense-amount').value;
             if(name && amount) {
-                document.getElementById('balance-display').innerText = `Dernière dépense : ${name} (${amount}€)`;
+                document.getElementById('balance-display').innerText = `${name} : ${amount}€`;
                 document.getElementById('expense-name').value = '';
                 document.getElementById('expense-amount').value = '';
-                alert('Dépense enregistrée avec succès !');
-            } else {
-                alert('Veuillez renseigner tous les champs.');
             }
         }
 
@@ -253,7 +379,7 @@
             const name = document.getElementById('user-name-input').value;
             if(name) {
                 document.getElementById('user-initial').innerText = name.charAt(0).toUpperCase();
-                alert('Profil mis à jour avec élégance !');
+                alert(currentLang === 'fr' ? 'Profil mis à jour !' : 'Profile updated!');
             }
         }
     </script>
