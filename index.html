@@ -9,64 +9,52 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #f7f4ed; color: #2c2a29; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
         
-        header { background: #efece4; border-bottom: 1px solid #e2ddd3; color: #2c2a29; padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 1000; }
-        .logo { font-weight: 700; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
-        .user-avatar { width: 36px; height: 36px; background: #c5b59b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+        header { background: #efece4; border-bottom: 1px solid #e2ddd3; color: #2c2a29; padding: 14px 25px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 1000; }
+        .logo { font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        .user-avatar { width: 34px; height: 34px; background: #c5b59b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
 
-        .content { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 110px; display: none; max-width: 900px; width: 100%; margin: 0 auto; }
+        /* Contenu principal adaptatif paysage / portrait */
+        .content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; display: none; max-width: 1200px; width: 100%; margin: 0 auto; }
         .content.active { display: block; }
 
-        .hero-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 24px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
-        .hero-card h1 { font-size: 1.5rem; margin-bottom: 8px; color: #1a1918; font-weight: 600; }
+        .hero-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 22px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
+        .hero-card h1 { font-size: 1.4rem; margin-bottom: 6px; color: #1a1918; font-weight: 600; }
         
-        .sub-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         
-        .feature-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 20px; border-radius: 18px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .feature-card { background: #ffffff; border: 1px solid #e7e2d7; padding: 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .feature-card:hover { border-color: #bfa88b; transform: translateY(-2px); }
         .feature-card h3 { font-size: 1.1rem; margin-bottom: 6px; color: #1a1918; font-weight: 600; }
-        .feature-card p { font-size: 0.9rem; color: #767067; line-height: 1.4; }
-        .action-link { display: inline-block; margin-top: 10px; color: #8c7355; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; }
+        .feature-card p { font-size: 0.88rem; color: #767067; line-height: 1.4; }
+        .action-link { display: inline-block; margin-top: 10px; color: #8c7355; font-weight: 700; font-size: 0.85rem; }
 
-        #map { width: 100%; height: calc(100vh - 260px); border-radius: 14px; min-height: 350px; margin-bottom: 15px; }
+        /* Carte optimisée pour le mode paysage */
+        #map { width: 100%; height: calc(100vh - 220px); border-radius: 14px; min-height: 380px; margin-bottom: 15px; }
 
-        input, button.btn { width: 100%; padding: 14px; margin-top: 10px; margin-bottom: 15px; background: #f4f0e8; border: 1px solid #ded6c8; border-radius: 12px; font-size: 1rem; color: #2c2a29; }
+        input, button.btn { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 12px; background: #f4f0e8; border: 1px solid #ded6c8; border-radius: 10px; font-size: 0.95rem; color: #2c2a29; }
         input:focus { border-color: #8c7355; outline: none; background: #fff; }
         button.btn { background: #8c7355; color: white; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
         button.btn:hover { background: #755f45; }
 
-        .music-player { background: #efece4; padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem; border: 1px solid #e2ddd3; }
+        .music-player { background: #efece4; padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid #e2ddd3; }
 
-        .todo-item { display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 12px 16px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e7e2d7; }
-        .todo-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: #8c7355; margin: 0; }
+        .todo-item { display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; border: 1px solid #e7e2d7; font-size: 0.90rem; }
+        .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #8c7355; margin: 0; }
 
-        /* Navigation adaptative selon l'écran */
-        nav { display: flex; background: #efece4; border-top: 1px solid #e2ddd3; position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; z-index: 99999; }
+        /* Barre de navigation fixée en bas pour le tactile / tablette */
+        nav { display: flex; background: #efece4; border-top: 1px solid #e2ddd3; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; z-index: 99999; }
         nav button { flex: 1; background: none; border: none; font-size: 0.75rem; color: #767067; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-weight: 500; }
         nav button.active { color: #8c7355; font-weight: 700; }
 
-        /* Adaptation pour ordinateurs / grands écrans (PC & Mac) */
-        @media (min-width: 768px) {
-            body { background-color: #efece4; }
-            header { padding: 20px 40px; border-bottom: 1px solid #ded6c8; }
-            .content { padding: 30px; max-width: 1000px; background: #f7f4ed; border-radius: 20px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); height: calc(100vh - 120px); overflow-y: auto; }
+        /* MEDIA QUERY SPÉCIFIQUE IPAD PAYSAGE & TABLETTES */
+        @media (min-width: 1024px) and (orientation: landscape) {
+            .content { padding: 30px 40px; }
             .sub-grid { grid-template-columns: repeat(3, 1fr); }
-            nav { position: static; width: 100%; border-top: none; border-bottom: 1px solid #e2ddd3; height: 60px; background: #ffffff; }
-            nav button { flex-direction: row; gap: 8px; font-size: 0.95rem; font-weight: 600; border-bottom: 3px solid transparent; }
-            nav button.active { border-bottom-color: #8c7355; background: #f7f4ed; }
-            body { flex-direction: column-reverse; } /* Place la nav en haut sur PC si souhaité, ou gère le flux */
+            #map { height: calc(100vh - 200px); }
         }
     </style>
 </head>
 <body>
-
-    <!-- Barre de navigation (En haut sur PC, en bas sur Mobile) -->
-    <nav>
-        <button id="btn-accueil" class="active" onclick="switchTab('accueil')">✨ Accueil</button>
-        <button id="btn-plan" onclick="switchTab('plan')">📋 To-Do</button>
-        <button id="btn-carte" onclick="switchTab('carte')">🗺️ Hôtels</button>
-        <button id="btn-frais" onclick="switchTab('frais')">💶 Frais</button>
-        <button id="btn-profil" onclick="switchTab('profil')">👤 Profil</button>
-    </nav>
 
     <header>
         <div class="logo">✨ Escale</div>
@@ -83,8 +71,8 @@
 
         <div class="hero-card">
             <h1>Lisbonne • Prochain Voyage</h1>
-            <p style="color: #767067; margin-bottom: 10px;">2 voyageurs • Séjour Confirmé</p>
-            <div style="font-size: 1.2rem; font-weight: 700; color: #5a7d61;">Cagnotte solde : +6,00 €</div>
+            <p style="color: #767067; margin-bottom: 8px;">2 voyageurs • Séjour Confirmé</p>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #5a7d61;">Cagnotte solde : +6,00 €</div>
         </div>
 
         <div class="sub-grid">
@@ -110,13 +98,13 @@
     <div id="tab-plan" class="content">
         <div class="hero-card">
             <h2>To-Do List du Voyage</h2>
-            <div style="margin-top: 15px;">
+            <div style="margin-top: 12px;">
                 <div class="todo-item"><input type="checkbox" checked> <span>Réserver l'hébergement à Lisbonne</span></div>
                 <div class="todo-item"><input type="checkbox"> <span>Acheter les billets d'avion</span></div>
                 <div class="todo-item"><input type="checkbox"> <span>Télécharger les cartes hors-ligne</span></div>
                 <div class="todo-item"><input type="checkbox"> <span>Préparer la valise & adaptateur secteur</span></div>
             </div>
-            <input type="text" id="new-task" placeholder="Ajouter une tâche..." style="margin-top: 15px;">
+            <input type="text" id="new-task" placeholder="Ajouter une tâche..." style="margin-top: 12px;">
             <button class="btn" onclick="addTask()">Ajouter à la liste</button>
         </div>
     </div>
@@ -131,16 +119,16 @@
         </div>
         <div class="hero-card">
             <h3>Synthèse des comptes</h3>
-            <p id="balance-display" style="margin-top: 10px; color: #767067;">Aucune dépense enregistrée.</p>
+            <p id="balance-display" style="margin-top: 8px; color: #767067;">Aucune dépense enregistrée.</p>
         </div>
     </div>
 
     <!-- Onglet Carte & Hôtels Garantis -->
     <div id="tab-carte" class="content">
         <div id="map"></div>
-        <div class="hero-card" style="margin-top: 15px;">
+        <div class="hero-card" style="margin-top: 10px;">
             <h3>⭐ Vos Hôtels Favoris</h3>
-            <ul id="favorites-list" style="margin-top: 10px; padding-left: 20px; color: #767067;">
+            <ul id="favorites-list" style="margin-top: 8px; padding-left: 20px; color: #767067; font-size: 0.9rem;">
                 <li>Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !</li>
             </ul>
         </div>
@@ -154,6 +142,15 @@
             <button class="btn" onclick="updateProfile()">Mettre à jour</button>
         </div>
     </div>
+
+    <!-- Barre de navigation -->
+    <nav>
+        <button id="btn-accueil" class="active" onclick="switchTab('accueil')">✨ Accueil</button>
+        <button id="btn-plan" onclick="switchTab('plan')">📋 To-Do</button>
+        <button id="btn-carte" onclick="switchTab('carte')">🗺️ Hôtels</button>
+        <button id="btn-frais" onclick="switchTab('frais')">💶 Frais</button>
+        <button id="btn-profil" onclick="switchTab('profil')">👤 Profil</button>
+    </nav>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
