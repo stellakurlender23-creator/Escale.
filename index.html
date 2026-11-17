@@ -118,37 +118,42 @@
             <div class="sub-grid">
                 <div class="feature-card" onclick="switchTab('nouveau')">
                     <h3 data-i18n="card1_title">✈️ Programmer un voyage</h3>
-                    <p data-i18n="card1_desc">Choisissez une ville dans le menu déroulant.</p>
+                    <p data-i18n="card1_desc">Choisissez une destination mondiale.</p>
                     <span class="action-link" data-i18n="create">CRÉER →</span>
                 </div>
                 <div class="feature-card" onclick="switchTab('carte')">
-                    <h3 data-i18n="card2_title">🗺️ Hôtels & Favoris</h3>
-                    <p data-i18n="card2_desc">Hôtels et Airbnb géolocalisés actualisés.</p>
+                    <h3 data-i18n="card2_title">🗺️ Hôtels (Booking)</h3>
+                    <p data-i18n="card2_desc">Accédez aux réservations Booking.</p>
                     <span class="action-link" data-i18n="view_map">VOIR LA CARTE →</span>
                 </div>
                 <div class="feature-card" onclick="switchTab('restaurants')">
-                    <h3 data-i18n="card4_title">🍽️ Guide Restos</h3>
-                    <p data-i18n="card4_desc">Restos filtrés selon vos préférences alimentaires.</p>
+                    <h3 data-i18n="card4_title">🍽️ Guide Restos (TheFork)</h3>
+                    <p data-i18n="card4_desc">Restos filtrés selon votre régime.</p>
                     <span class="action-link" data-i18n="view_restos">DÉCOUVRIR →</span>
                 </div>
             </div>
         </div>
 
-        <!-- Programmer un Voyage avec Menu Déroulant -->
+        <!-- Programmer un Voyage avec Menu Déroulant Mondial -->
         <div id="tab-nouveau" class="content">
             <div class="hero-card">
                 <h2 data-i18n="explore_world">Programmer un Voyage</h2>
                 
-                <label style="font-size:0.85rem; color:var(--muted); font-weight:600;">Choisissez une destination</label>
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600;">Choisissez une ville parmi le monde entier</label>
                 <select id="trip-city-select" onchange="selectPresetCity()">
                     <option value="GPS">📍 Utiliser ma position GPS actuelle</option>
+                    <option value="Nice">🇫🇷 Nice, France</option>
                     <option value="Paris">🇫🇷 Paris, France</option>
                     <option value="Tokyo">🇯🇵 Tokyo, Japon</option>
+                    <option value="New York">🇺🇸 New York, USA</option>
+                    <option value="Londres">🇬🇧 Londres, Royaume-Uni</option>
                     <option value="Lisbonne">🇵🇹 Lisbonne, Portugal</option>
                     <option value="Rome">🇮🇹 Rome, Italie</option>
-                    <option value="New York">🇺🇸 New York, USA</option>
-                    <option value="Marrakech">🇲🇦 Marrakech, Maroc</option>
                     <option value="Barcelone">🇪🇸 Barcelone, Espagne</option>
+                    <option value="Marrakech">🇲🇦 Marrakech, Maroc</option>
+                    <option value="Dubai">🇦🇪 Dubaï, Émirats Arabes Unis</option>
+                    <option value="Bangkok">🇹🇭 Bangkok, Thaïlande</option>
+                    <option value="Sydney">🇦🇺 Sydney, Australie</option>
                 </select>
 
                 <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="dates_label">Dates du séjour</label>
@@ -161,10 +166,10 @@
             </div>
         </div>
 
-        <!-- Guide des Restaurants & Notes -->
+        <!-- Guide des Restaurants (Style TheFork) -->
         <div id="tab-restaurants" class="content">
             <div class="hero-card">
-                <h2 id="resto-guide-title">🍽️ Guide Gastronomique</h2>
+                <h2 id="resto-guide-title">🍽️ Guide TheFork</h2>
                 <p id="resto-filter-info" style="color:var(--muted); margin-bottom:15px; font-size:0.9rem;">Chargement...</p>
                 <div id="restaurants-list"></div>
             </div>
@@ -190,7 +195,7 @@
             </div>
         </div>
 
-        <!-- Carte -->
+        <!-- Carte & Hôtels (Booking) -->
         <div id="tab-carte" class="content">
             <div id="map"></div>
             <div class="hero-card" style="margin-top: 10px;">
@@ -201,7 +206,7 @@
             </div>
         </div>
 
-        <!-- Profil Enrichi & Préférences -->
+        <!-- Profil & Régime Alimentaire -->
         <div id="tab-profil" class="content">
             <div class="hero-card">
                 <h2 data-i18n="profile_title">Mon Profil & Préférences</h2>
@@ -244,16 +249,21 @@
         let isDarkMode = false;
         
         let userProfile = { name: "Stella", age: 24, travelStyle: "Luxe & Détente", diet: "Tous" };
-        let currentTrip = { city: "Ma Position GPS", lat: 48.8566, lng: 2.3522, dates: "Séjour Actuel", travelers: 2 };
+        let currentTrip = { city: "Nice", lat: 43.7102, lng: 7.2620, dates: "10 au 20 Juillet 2026", travelers: 2 };
 
         const cityCoordinates = {
+            "Nice": { lat: 43.7102, lng: 7.2620 },
             "Paris": { lat: 48.8566, lng: 2.3522 },
             "Tokyo": { lat: 35.6762, lng: 139.6503 },
+            "New York": { lat: 40.7128, lng: -74.0060 },
+            "Londres": { lat: 51.5074, lng: -0.1278 },
             "Lisbonne": { lat: 38.7223, lng: -9.1393 },
             "Rome": { lat: 41.9028, lng: 12.4964 },
-            "New York": { lat: 40.7128, lng: -74.0060 },
+            "Barcelone": { lat: 41.3851, lng: 2.1734 },
             "Marrakech": { lat: 31.6295, lng: -7.9811 },
-            "Barcelone": { lat: 41.3851, lng: 2.1734 }
+            "Dubai": { lat: 25.2048, lng: 55.2708 },
+            "Bangkok": { lat: 13.7563, lng: 100.5018 },
+            "Sydney": { lat: -33.8688, lng: 151.2093 }
         };
 
         const translations = {
@@ -261,8 +271,8 @@
                 home: "Accueil", trip: "Voyage", hotels: "Hôtels", restaurants: "Restos", todo: "To-Do", profile: "Profil",
                 music: "🎶 Ambiance Voyage (Lofi Chill)", balance: "Cagnotte solde : +6,00 €",
                 card1_title: "✈️ Programmer un voyage", card1_desc: "Choisissez une ville dans le menu déroulant.", create: "CRÉER →",
-                card2_title: "🗺️ Hôtels & Favoris", card2_desc: "Hôtels et Airbnb géolocalisés.", view_map: "VOIR LA CARTE →",
-                card4_title: "🍽️ Guide Restos", card4_desc: "Restos filtrés selon votre régime.", view_restos: "DÉCOUVRIR →",
+                card2_title: "🗺️ Hôtels (Booking)", card2_desc: "Réservez directement sur Booking.", view_map: "VOIR LA CARTE →",
+                card4_title: "🍽️ Guide Restos (TheFork)", card4_desc: "Restos filtrés selon votre régime.", view_restos: "DÉCOUVRIR →",
                 explore_world: "Programmer un Voyage", search_label: "Choisissez une destination",
                 dates_label: "Dates du séjour", travelers_label: "Nombre de voyageurs", validate_btn: "Valider la programmation",
                 todo_title: "To-Do List & Frais partagés", task1: "Réserver l'hébergement", task2: "Acheter les billets de transport",
@@ -275,8 +285,8 @@
                 home: "Home", trip: "Trip", hotels: "Hotels", restaurants: "Restos", todo: "To-Do", profile: "Profile",
                 music: "🎶 Travel Vibe (Lofi Chill)", balance: "Wallet Balance: +€6.00",
                 card1_title: "✈️ Plan a Trip", card1_desc: "Choose a city from the dropdown.", create: "CREATE →",
-                card2_title: "🗺️ Hotels & Favorites", card2_desc: "Geolocated hotels and Airbnbs.", view_map: "VIEW MAP →",
-                card4_title: "🍽️ Resto Guide", card4_desc: "Restaurants filtered by your dietary preferences.", view_restos: "DISCOVER →",
+                card2_title: "🗺️ Hotels (Booking)", card2_desc: "Book directly on Booking.", view_map: "VIEW MAP →",
+                card4_title: "🍽️ Resto Guide (TheFork)", card4_desc: "Restaurants filtered by your dietary preferences.", view_restos: "DISCOVER →",
                 explore_world: "Program a Trip", search_label: "Choose a destination",
                 dates_label: "Trip Dates", travelers_label: "Number of Travelers", validate_btn: "Validate Program",
                 todo_title: "To-Do List & Shared Expenses", task1: "Book accommodation", task2: "Buy transport tickets",
@@ -295,24 +305,22 @@
                     currentTrip.lat = lat;
                     currentTrip.lng = lng;
 
-                    // Récupération automatique du nom de la ville via OpenStreetMap Reverse Geocoding
                     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10`)
                         .then(res => res.json())
                         .then(data => {
                             const cityName = data.address.city || data.address.town || data.address.village || data.address.state || "Ma Position GPS";
                             currentTrip.city = cityName;
                             document.getElementById('current-trip-title').innerText = `📍 ${cityName} (GPS Actuel)`;
-                            document.getElementById('current-trip-details').innerText = "Hôtels et restaurants actualisés autour de vous";
+                            document.getElementById('current-trip-details', currentTrip.dates).innerText = `${currentTrip.travelers} voyageurs • ${currentTrip.dates}`;
                         }).catch(() => {
                             currentTrip.city = "Ma Position GPS";
                             document.getElementById('current-trip-title').innerText = "📍 Position GPS Actuelle";
-                            document.getElementById('current-trip-details').innerText = "Hôtels et restaurants chargés";
                         });
                 }, () => {
-                    currentTrip.city = "Paris";
-                    currentTrip.lat = 48.8566;
-                    currentTrip.lng = 2.3522;
-                    document.getElementById('current-trip-title').innerText = "🇫🇷 Paris, France";
+                    currentTrip.city = "Nice";
+                    currentTrip.lat = 43.7102;
+                    currentTrip.lng = 7.2620;
+                    document.getElementById('current-trip-title').innerText = "🇫🇷 Nice, France";
                     document.getElementById('current-trip-details').innerText = "2 voyageurs • Séjour Confirmé";
                 });
             }
@@ -338,7 +346,7 @@
             document.getElementById('current-trip-title').innerText = `✨ ${currentTrip.city} • Voyage Programmé`;
             document.getElementById('current-trip-details').innerText = `${currentTrip.travelers} voyageurs • du ${currentTrip.dates}`;
             
-            alert(`Voyage programmé avec succès pour ${currentTrip.city} !`);
+            alert(`Voyage programmé pour ${currentTrip.city} (${currentTrip.dates}) !`);
             switchTab('carte');
         }
 
@@ -391,30 +399,37 @@
                     } else {
                         map.setView([currentTrip.lat, currentTrip.lng], 14);
                     }
-                    generateHotels(currentTrip.lat, currentTrip.lng);
+                    generateBookingHotels(currentTrip.lat, currentTrip.lng);
                     map.invalidateSize();
                 }, 250);
             } else if (tabName === 'restaurants') {
-                loadRestaurantsByDiet();
+                loadTheForkRestaurants();
             }
         }
 
-        function loadRestaurantsByDiet() {
+        function loadTheForkRestaurants() {
             const container = document.getElementById('restaurants-list');
-            document.getElementById('resto-guide-title').innerText = `🍽️ Restos actualisés à ${currentTrip.city}`;
-            document.getElementById('resto-filter-info').innerText = `Régime alimentaire appliqué : ${userProfile.diet}`;
+            document.getElementById('resto-guide-title').innerText = `🍽️ TheFork Guide • Restos à ${currentTrip.city}`;
+            document.getElementById('resto-filter-info').innerText = `Régime appliqué : ${userProfile.diet} (${currentTrip.travelers} pers.)`;
 
             let sampleRestos = [
-                { name: `L'Étoile de ${currentTrip.city}`, type: "Gastronomique 5★", rating: "⭐ 4.9", diet: "Gastronomique", dist: "Centre-ville" },
+                { name: `Le Gourmet de ${currentTrip.city}`, type: "Gastronomique • -20% TheFork", rating: "⭐ 4.9", diet: "Gastronomique", dist: "Centre-ville" },
                 { name: "Green Garden Bio & Local", type: "100% Végétarien", rating: "⭐ 4.8", diet: "Végétarien", dist: "Quartier historique" },
                 { name: "Pure & Gluten-Free Kitchen", type: "Sans Gluten Certified", rating: "⭐ 4.7", diet: "Sans gluten", dist: "Proche centre" },
-                { name: "Le Medina Halal Palace", type: "Cuisine Traditionnelle", rating: "⭐ 4.9", diet: "Halal", dist: "Centre-ville" },
-                { name: `Le Gourmet de ${currentTrip.city}`, type: "Brasserie & Lounge", rating: "⭐ 4.6", diet: "Tous", dist: "Vue panoramique" }
+                { name: "Le Medina Halal Palace", type: "Cuisine Traditionnelle • Halal", rating: "⭐ 4.9", diet: "Halal", dist: "Centre-ville" },
+                { name: `Bistrot du Coin (${currentTrip.city})`, type: "Brasserie & Lounge", rating: "⭐ 4.6", diet: "Tous", dist: "Vue panoramique" }
             ];
 
             let filtered = sampleRestos.filter(r => userProfile.diet === 'Tous' || r.diet === userProfile.diet);
 
-            container.innerHTML = filtered.map(r => `
+            // Lien de recherche direct vers TheFork avec la ville
+            const theForkSearchUrl = `https://www.thefork.fr/search?city=${encodeURIComponent(currentTrip.city)}`;
+
+            container.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <a href="${theForkSearchUrl}" target="_blank" class="btn" style="text-align:center; display:block; text-decoration:none; background:#da3743; color:white;">🔥 Voir toutes les dispos sur TheFork (${currentTrip.city})</a>
+                </div>
+            ` + filtered.map(r => `
                 <div class="restaurant-item">
                     <div>
                         <h4 style="color:var(--text-color); margin-bottom:3px;">${r.name}</h4>
@@ -422,38 +437,32 @@
                     </div>
                     <div style="text-align:right;">
                         <span style="font-weight:700; color:var(--primary);">${r.rating}</span><br>
-                        <button class="control-btn" style="margin-top:6px;" onclick="alert('Itinéraire ouvert vers ${r.name} à ${currentTrip.city}')">Y aller</button>
+                        <a href="${theForkSearchUrl}" target="_blank" class="control-btn" style="margin-top:6px; background:#da3743; color:white; border:none; text-decoration:none; display:inline-block;">Réserver</a>
                     </div>
                 </div>
             `).join('');
         }
 
-        function generateHotels(lat, lng) {
+        function generateBookingHotels(lat, lng) {
             if (!map) return;
             if (markersLayer) map.removeLayer(markersLayer);
             markersLayer = L.layerGroup().addTo(map);
 
             L.marker([lat, lng]).addTo(markersLayer).bindPopup(`<b>📍 ${currentTrip.city}</b>`).openPopup();
 
+            // Lien de recherche officiel Booking.com pré-rempli avec la ville
+            const bookingSearchUrl = `https://www.booking.com/searchresults.fr.html?ss=${encodeURIComponent(currentTrip.city)}&group_adults=${currentTrip.travelers}`;
+
             const offsets = [
-                { dLat: 0.008, dLng: 0.006, name: `Grand Luxury Hotel & Spa (${currentTrip.city})`, price: "180€ / nuit", rating: "⭐ 4.9" },
-                { dLat: -0.006, dLng: 0.009, name: `Chic Design Loft (Airbnb)`, price: "110€ / nuit", rating: "⭐ 4.8" },
+                { dLat: 0.008, dLng: 0.006, name: `Grand Luxury Hotel & Spa (${currentTrip.city})`, price: "180€ / nuit", rating: "⭐ 4.9 (Booking Genius)" },
+                { dLat: -0.006, dLng: 0.009, name: `Chic Design Loft (Airbnb / Booking)`, price: "110€ / nuit", rating: "⭐ 4.8" },
                 { dLat: 0.005, dLng: -0.008, name: `Boutique Hotel & Rooftop`, price: "140€ / nuit", rating: "⭐ 4.7" }
             ];
 
             offsets.forEach(h => {
                 L.marker([lat + h.dLat, lng + h.dLng]).addTo(markersLayer)
-                    .bindPopup(`<b>🏨 ${h.name}</b><br>${h.rating} • ${h.price}<br><br><button class="btn" style="padding:5px 8px;" onclick="addFavorite('${h.name}', '${h.price}')">⭐ Favoris</button>`);
+                    .bindPopup(`<b>🏨 ${h.name}</b><br>${h.rating}<br><b>${h.price}</b><br><br><a href="${bookingSearchUrl}" target="_blank" style="background:#003580; color:white; padding:6px 10px; border-radius:6px; text-decoration:none; font-size:0.8rem; display:inline-block; font-weight:600;">Réserver sur Booking ↗</a>`);
             });
-        }
-
-        function addFavorite(name, price) {
-            const item = `${name} (${price})`;
-            if (!favorites.includes(item)) {
-                favorites.push(item);
-                document.getElementById('favorites-list').innerHTML = favorites.map(f => `<li>✨ ${f}</li>`).join('');
-                alert('Ajouté aux favoris !');
-            }
         }
 
         function updateProfile() {
