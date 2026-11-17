@@ -110,8 +110,8 @@
             </div>
 
             <div class="hero-card">
-                <h1 id="current-trip-title">Localisation en cours...</h1>
-                <p id="current-trip-details" style="color: var(--muted); margin-bottom: 8px;">Recherche de votre position GPS...</p>
+                <h1 id="current-trip-title">Recherche de la position GPS...</h1>
+                <p id="current-trip-details" style="color: var(--muted); margin-bottom: 8px;">Veuillez patienter pendant la géolocalisation.</p>
                 <div style="font-size: 1.15rem; font-weight: 700; color: #5a7d61;" data-i18n="balance">Cagnotte solde : +6,00 €</div>
             </div>
 
@@ -123,12 +123,12 @@
                 </div>
                 <div class="feature-card" onclick="switchTab('carte')">
                     <h3 data-i18n="card2_title">🗺️ Hôtels & Favoris</h3>
-                    <p data-i18n="card2_desc">Hôtels et Airbnb géolocalisés.</p>
+                    <p data-i18n="card2_desc">Hôtels et Airbnb géolocalisés actualisés.</p>
                     <span class="action-link" data-i18n="view_map">VOIR LA CARTE →</span>
                 </div>
                 <div class="feature-card" onclick="switchTab('restaurants')">
                     <h3 data-i18n="card4_title">🍽️ Guide Restos</h3>
-                    <p data-i18n="card4_desc">Restos filtrés selon votre régime.</p>
+                    <p data-i18n="card4_desc">Restos filtrés selon vos préférences alimentaires.</p>
                     <span class="action-link" data-i18n="view_restos">DÉCOUVRIR →</span>
                 </div>
             </div>
@@ -201,7 +201,7 @@
             </div>
         </div>
 
-        <!-- Profil Enrichi -->
+        <!-- Profil Enrichi & Préférences -->
         <div id="tab-profil" class="content">
             <div class="hero-card">
                 <h2 data-i18n="profile_title">Mon Profil & Préférences</h2>
@@ -290,13 +290,29 @@
         function initUserLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
-                    currentTrip.lat = position.coords.latitude;
-                    currentTrip.lng = position.coords.longitude;
-                    currentTrip.city = "Ma Position GPS";
-                    document.getElementById('current-trip-title').innerText = "📍 Ma Position GPS Actuelle";
-                    document.getElementById('current-trip-details').innerText = "Hôtels et restaurants chargés autour de vous";
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    currentTrip.lat = lat;
+                    currentTrip.lng = lng;
+
+                    // Récupération automatique du nom de la ville via OpenStreetMap Reverse Geocoding
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const cityName = data.address.city || data.address.town || data.address.village || data.address.state || "Ma Position GPS";
+                            currentTrip.city = cityName;
+                            document.getElementById('current-trip-title').innerText = `📍 ${cityName} (GPS Actuel)`;
+                            document.getElementById('current-trip-details').innerText = "Hôtels et restaurants actualisés autour de vous";
+                        }).catch(() => {
+                            currentTrip.city = "Ma Position GPS";
+                            document.getElementById('current-trip-title').innerText = "📍 Position GPS Actuelle";
+                            document.getElementById('current-trip-details').innerText = "Hôtels et restaurants chargés";
+                        });
                 }, () => {
-                    document.getElementById('current-trip-title').innerText = "🌍 Paris, France";
+                    currentTrip.city = "Paris";
+                    currentTrip.lat = 48.8566;
+                    currentTrip.lng = 2.3522;
+                    document.getElementById('current-trip-title').innerText = "🇫🇷 Paris, France";
                     document.getElementById('current-trip-details').innerText = "2 voyageurs • Séjour Confirmé";
                 });
             }
@@ -385,18 +401,18 @@
 
         function loadRestaurantsByDiet() {
             const container = document.getElementById('restaurants-list');
-            document.getElementById('resto-guide-title').innerText = `🍽️ Restos à ${currentTrip.city}`;
-            document.getElementById('resto-filter-info').innerText = `Régime alimentaire filtré : ${userProfile.diet}`;
+            document.getElementById('resto-guide-title').innerText = `🍽️ Restos actualisés à ${currentTrip.city}`;
+            document.getElementById('resto-filter-info').innerText = `Régime alimentaire appliqué : ${userProfile.diet}`;
 
             let sampleRestos = [
-                { name: `L'Étoile de ${currentTrip.city}`, type: "Gastronomique", rating: "⭐ 4.9", diet: "Gastronomique", dist: "Centre-ville" },
+                { name: `L'Étoile de ${currentTrip.city}`, type: "Gastronomique 5★", rating: "⭐ 4.9", diet: "Gastronomique", dist: "Centre-ville" },
                 { name: "Green Garden Bio & Local", type: "100% Végétarien", rating: "⭐ 4.8", diet: "Végétarien", dist: "Quartier historique" },
                 { name: "Pure & Gluten-Free Kitchen", type: "Sans Gluten Certified", rating: "⭐ 4.7", diet: "Sans gluten", dist: "Proche centre" },
                 { name: "Le Medina Halal Palace", type: "Cuisine Traditionnelle", rating: "⭐ 4.9", diet: "Halal", dist: "Centre-ville" },
                 { name: `Le Gourmet de ${currentTrip.city}`, type: "Brasserie & Lounge", rating: "⭐ 4.6", diet: "Tous", dist: "Vue panoramique" }
             ];
 
-            let filtered = sampleRestos.filter(r => userProfile.diet === 'Tous' || r.diet === userProfile.diet || r.diet === 'Tous');
+            let filtered = sampleRestos.filter(r => userProfile.diet === 'Tous' || r.diet === userProfile.diet);
 
             container.innerHTML = filtered.map(r => `
                 <div class="restaurant-item">
@@ -447,7 +463,7 @@
             userProfile.diet = document.getElementById('user-diet').value;
 
             document.getElementById('user-initial').innerText = userProfile.name.charAt(0).toUpperCase();
-            alert(`Profil de ${userProfile.name} mis à jour !\nRégime pris en compte : ${userProfile.diet}`);
+            alert(`Profil de ${userProfile.name} (${userProfile.age} ans) mis à jour !\nRégime alimentaire enregistré : ${userProfile.diet}`);
         }
 
         function addTask() {
