@@ -47,7 +47,7 @@
         .hero-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 22px; border-radius: 18px; margin-bottom: 15px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
         .hero-card h1 { font-size: 1.4rem; margin-bottom: 6px; color: var(--text-color); font-weight: 600; }
         
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
         
         .feature-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 18px; border-radius: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .feature-card:hover { border-color: var(--primary); transform: translateY(-2px); }
@@ -57,24 +57,23 @@
 
         #map { width: 100%; height: calc(100vh - 280px); border-radius: 14px; min-height: 380px; margin-bottom: 15px; }
 
-        input, select, button.btn { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-color); }
-        input:focus, select:focus { border-color: var(--primary); outline: none; background: var(--card-bg); }
+        input, select, textarea, button.btn { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-color); }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: var(--card-bg); }
         button.btn { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
         button.btn:hover { background: var(--primary-hover); }
 
         .music-player { background: var(--header-bg); padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 0.85rem; border: 1px solid var(--border-color); }
 
-        .todo-item { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 10px 14px; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border-color); font-size: 0.90rem; }
-        .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); margin: 0; }
+        .todo-item, .restaurant-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px 16px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border-color); font-size: 0.90rem; }
 
         nav { display: flex; background: var(--header-bg); border-top: 1px solid var(--border-color); position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; z-index: 99999; }
-        nav button { flex: 1; background: none; border: none; font-size: 0.75rem; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-weight: 500; }
+        nav button { flex: 1; background: none; border: none; font-size: 0.7rem; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; font-weight: 500; }
         nav button.active { color: var(--primary); font-weight: 700; }
 
         @media (min-width: 1024px) {
             body { flex-direction: row-reverse; }
-            nav { position: static; width: 90px; height: 100vh; flex-direction: column; border-top: none; border-left: 1px solid var(--border-color); }
-            nav button { height: 20%; font-size: 0.8rem; }
+            nav { position: static; width: 100px; height: 100vh; flex-direction: column; border-top: none; border-left: 1px solid var(--border-color); }
+            nav button { height: 16.6%; font-size: 0.75rem; }
             .content { padding: 30px; height: 100vh; overflow-y: auto; }
             .sub-grid { grid-template-columns: repeat(3, 1fr); }
             #map { height: calc(100vh - 240px); }
@@ -87,6 +86,7 @@
         <button id="nav-home" class="active" onclick="switchTab('accueil')">✨ <span data-i18n="home">Accueil</span></button>
         <button id="nav-trip" onclick="switchTab('nouveau')">✈️ <span data-i18n="trip">Voyage</span></button>
         <button id="nav-map" onclick="switchTab('carte')">🗺️ <span data-i18n="hotels">Hôtels</span></button>
+        <button id="nav-resto" onclick="switchTab('restaurants')">🍽️ <span data-i18n="restaurants">Restaurants</span></button>
         <button id="nav-todo" onclick="switchTab('plan')">📋 <span data-i18n="todo">To-Do</span></button>
         <button id="nav-profile" onclick="switchTab('profil')">👤 <span data-i18n="profile">Profil</span></button>
     </nav>
@@ -123,13 +123,13 @@
                 </div>
                 <div class="feature-card" onclick="switchTab('carte')">
                     <h3 data-i18n="card2_title">🗺️ Hôtels & Favoris</h3>
-                    <p data-i18n="card2_desc">Hôtels et Airbnb géolocalisés de votre destination en temps réel.</p>
+                    <p data-i18n="card2_desc">Hôtels et Airbnb géolocalisés de votre destination.</p>
                     <span class="action-link" data-i18n="view_map">VOIR LA CARTE →</span>
                 </div>
-                <div class="feature-card" onclick="switchTab('plan')">
-                    <h3 data-i18n="card3_title">📋 To-Do & Frais</h3>
-                    <p data-i18n="card3_desc">Gérez vos tâches et le partage des dépenses.</p>
-                    <span class="action-link" data-i18n="organize">ORGANISER →</span>
+                <div class="feature-card" onclick="switchTab('restaurants')">
+                    <h3 data-i18n="card4_title">🍽️ Guide Restos</h3>
+                    <p data-i18n="card4_desc">Adresses adaptées à votre régime alimentaire.</p>
+                    <span class="action-link" data-i18n="view_restos">DÉCOUVRIR →</span>
                 </div>
             </div>
         </div>
@@ -138,7 +138,7 @@
         <div id="tab-nouveau" class="content">
             <div class="hero-card">
                 <h2 data-i18n="explore_world">Explorer le Monde Entier</h2>
-                <label style="font-size:0.85rem; color:var(--muted); font-weight:600;" data-i18n="search_label">Tapez n'importe quelle ville ou pays du monde</label>
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600;" data-i18n="search_label">Ville ou pays de destination</label>
                 <input type="text" id="world-destination" placeholder="Ex: Tokyo, New York, Bali..." value="Tokyo">
 
                 <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="dates_label">Dates du séjour</label>
@@ -147,7 +147,18 @@
                 <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="travelers_label">Nombre de voyageurs</label>
                 <input type="number" id="trip-travelers" value="2" min="1" max="10">
 
-                <button class="btn" onclick="searchWorldDestination()" style="margin-top: 15px;" data-i18n="validate_btn">Valider et générer les hébergements</button>
+                <button class="btn" onclick="searchWorldDestination()" style="margin-top: 15px;" data-i18n="validate_btn">Valider la destination</button>
+            </div>
+        </div>
+
+        <!-- Guide des Restaurants & Notes -->
+        <div id="tab-restaurants" class="content">
+            <div class="hero-card">
+                <h2 id="resto-guide-title">🍽️ Guide Gastronomique géolocalisé</h2>
+                <p id="resto-filter-info" style="color:var(--muted); margin-bottom:15px; font-size:0.9rem;">Filtré selon votre régime : Standard / Tous</p>
+                <div id="restaurants-list">
+                    <!-- Rempli dynamiquement -->
+                </div>
             </div>
         </div>
 
@@ -158,14 +169,13 @@
                 <div style="margin-top: 12px; margin-bottom: 20px;">
                     <div class="todo-item"><input type="checkbox" checked> <span data-i18n="task1">Réserver l'hébergement</span></div>
                     <div class="todo-item"><input type="checkbox"> <span data-i18n="task2">Acheter les billets de transport</span></div>
-                    <div class="todo-item"><input type="checkbox"> <span data-i18n="task3">Préparer la valise</span></div>
                 </div>
                 <input type="text" id="new-task" placeholder="Ajouter une tâche...">
                 <button class="btn" onclick="addTask()" data-i18n="add_task">Ajouter à la liste</button>
             </div>
             <div class="hero-card">
                 <h2 data-i18n="expenses_title">Dépenses</h2>
-                <input type="text" id="expense-name" placeholder="Libellé (ex: Hôtel)">
+                <input type="text" id="expense-name" placeholder="Libellé (ex: Dîner)">
                 <input type="number" id="expense-amount" placeholder="Montant en €">
                 <button class="btn" onclick="addExpense()" data-i18n="add_expense">Ajouter à la cagnotte</button>
                 <p id="balance-display" style="margin-top: 10px; color: var(--muted);" data-i18n="no_expense">Aucune dépense enregistrée.</p>
@@ -178,17 +188,40 @@
             <div class="hero-card" style="margin-top: 10px;">
                 <h3 data-i18n="favorites_title">⭐ Vos Hôtels Favoris</h3>
                 <ul id="favorites-list" style="margin-top: 8px; padding-left: 20px; color: var(--muted); font-size: 0.9rem;">
-                    <li data-i18n="no_favorites">Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !</li>
+                    <li data-i18n="no_favorites">Aucun favori pour l'instant.</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Profil -->
+        <!-- Profil Enrichi -->
         <div id="tab-profil" class="content">
             <div class="hero-card">
-                <h2 data-i18n="profile_title">Mon Profil</h2>
-                <input type="text" id="user-name-input" value="Stella" placeholder="Votre prénom">
-                <button class="btn" onclick="updateProfile()" data-i18n="update_btn">Mettre à jour</button>
+                <h2 data-i18n="profile_title">Mon Profil & Préférences</h2>
+                
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600;" data-i18n="name_label">Prénom</label>
+                <input type="text" id="user-name-input" value="Stella">
+
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="age_label">Âge</label>
+                <input type="number" id="user-age-input" value="24" min="12" max="120">
+
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="travel_style_label">Style de voyage préféré</label>
+                <select id="user-travel-style">
+                    <option value="Luxe & Détente">Luxe & Détente</option>
+                    <option value="Aventure & Découverte">Aventure & Découverte</option>
+                    <option value="Culture & Gastronomie">Culture & Gastronomie</option>
+                    <option value="Petit budget / Backpack">Petit budget / Backpack</option>
+                </select>
+
+                <label style="font-size:0.85rem; color:var(--muted); font-weight:600; margin-top:10px; display:block;" data-i18n="diet_label">Régime / Préférences culinaires</label>
+                <select id="user-diet">
+                    <option value="Tous">Tous régimes / Standard</option>
+                    <option value="Végétarien">Végétarien</option>
+                    <option value="Sans gluten">Sans gluten</option>
+                    <option value="Halal">Halal</option>
+                    <option value="Gastronomique">Gastronomique / 5 Étoiles</option>
+                </select>
+
+                <button class="btn" onclick="updateProfile()" style="margin-top: 15px;" data-i18n="update_btn">Enregistrer le profil</button>
             </div>
         </div>
     </div>
@@ -201,33 +234,44 @@
         let favorites = [];
         let currentLang = 'fr';
         let isDarkMode = false;
+        
+        let userProfile = {
+            name: "Stella",
+            age: 24,
+            travelStyle: "Luxe & Détente",
+            diet: "Tous"
+        };
+
+        let currentTrip = { city: "Tokyo", lat: 35.6762, lng: 139.6503, dates: "10 au 20 Juillet 2026", travelers: 2 };
 
         const translations = {
             fr: {
-                home: "Accueil", trip: "Voyage", hotels: "Hôtels", todo: "To-Do", profile: "Profil",
+                home: "Accueil", trip: "Voyage", hotels: "Hôtels", restaurants: "Restos", todo: "To-Do", profile: "Profil",
                 music: "🎶 Ambiance Voyage (Lofi Chill)", balance: "Cagnotte solde : +6,00 €",
                 card1_title: "✈️ Programmer un voyage", card1_desc: "Recherchez n'importe quelle destination dans le monde entier.", create: "CRÉER →",
-                card2_title: "🗺️ Hôtels & Favoris", card2_desc: "Hôtels et Airbnb géolocalisés de votre destination en temps réel.", view_map: "VOIR LA CARTE →",
-                card3_title: "📋 To-Do & Frais", card3_desc: "Gérez vos tâches et le partage des dépenses.", organize: "ORGANISER →",
-                explore_world: "Explorer le Monde Entier", search_label: "Tapez n'importe quelle ville ou pays du monde",
-                dates_label: "Dates du séjour", travelers_label: "Nombre de voyageurs", validate_btn: "Valider et générer les hébergements",
-                todo_title: "To-Do List & Frais partagés", task1: "Réserver l'hébergement", task2: "Acheter les billets de transport", task3: "Préparer la valise",
+                card2_title: "🗺️ Hôtels & Favoris", card2_desc: "Hôtels et Airbnb géolocalisés de votre destination.", view_map: "VOIR LA CARTE →",
+                card4_title: "🍽️ Guide Restos", card4_desc: "Adresses adaptées à votre régime alimentaire.", view_restos: "DÉCOUVRIR →",
+                explore_world: "Explorer le Monde Entier", search_label: "Ville ou pays de destination",
+                dates_label: "Dates du séjour", travelers_label: "Nombre de voyageurs", validate_btn: "Valider la destination",
+                todo_title: "To-Do List & Frais partagés", task1: "Réserver l'hébergement", task2: "Acheter les billets de transport",
                 add_task: "Ajouter à la liste", expenses_title: "Dépenses", add_expense: "Ajouter à la cagnotte", no_expense: "Aucune dépense enregistrée.",
-                favorites_title: "⭐ Vos Hôtels Favoris", no_favorites: "Aucun favori pour l'instant. Cliquez sur un hôtel sur la carte pour l'ajouter !",
-                profile_title: "Mon Profil", update_btn: "Mettre à jour", theme_dark: "🌙 Sombre", theme_light: "☀️ Clair"
+                favorites_title: "⭐ Vos Hôtels Favoris", no_favorites: "Aucun favori pour l'instant.",
+                profile_title: "Mon Profil & Préférences", name_label: "Prénom", age_label: "Âge", travel_style_label: "Style de voyage préféré",
+                diet_label: "Régime / Préférences culinaires", update_btn: "Enregistrer le profil", theme_dark: "🌙 Sombre", theme_light: "☀️ Clair"
             },
             en: {
-                home: "Home", trip: "Trip", hotels: "Hotels", todo: "To-Do", profile: "Profile",
+                home: "Home", trip: "Trip", hotels: "Hotels", restaurants: "Restos", todo: "To-Do", profile: "Profile",
                 music: "🎶 Travel Vibe (Lofi Chill)", balance: "Wallet Balance: +€6.00",
                 card1_title: "✈️ Plan a Trip", card1_desc: "Search for any destination worldwide.", create: "CREATE →",
-                card2_title: "🗺️ Hotels & Favorites", card2_desc: "Geolocated hotels and Airbnbs in real time.", view_map: "VIEW MAP →",
-                card3_title: "📋 To-Do & Expenses", card3_desc: "Manage your tasks and split expenses.", organize: "ORGANIZE →",
-                explore_world: "Explore the World", search_label: "Type any city or country in the world",
-                dates_label: "Trip Dates", travelers_label: "Number of Travelers", validate_btn: "Validate & Generate Accommodations",
-                todo_title: "To-Do List & Shared Expenses", task1: "Book accommodation", task2: "Buy transport tickets", task3: "Pack luggage",
+                card2_title: "🗺️ Hotels & Favorites", card2_desc: "Geolocated hotels and Airbnbs.", view_map: "VIEW MAP →",
+                card4_title: "🍽️ Resto Guide", card4_desc: "Addresses tailored to your dietary preferences.", view_restos: "DISCOVER →",
+                explore_world: "Explore the World", search_label: "City or destination country",
+                dates_label: "Trip Dates", travelers_label: "Number of Travelers", validate_btn: "Validate Destination",
+                todo_title: "To-Do List & Shared Expenses", task1: "Book accommodation", task2: "Buy transport tickets",
                 add_task: "Add to list", expenses_title: "Expenses", add_expense: "Add to wallet", no_expense: "No expenses recorded.",
-                favorites_title: "⭐ Your Favorite Hotels", no_favorites: "No favorites yet. Click on a hotel on the map to add it!",
-                profile_title: "My Profile", update_btn: "Update", theme_dark: "🌙 Dark", theme_light: "☀️ Light"
+                favorites_title: "⭐ Your Favorite Hotels", no_favorites: "No favorites yet.",
+                profile_title: "My Profile & Preferences", name_label: "First Name", age_label: "Age", travel_style_label: "Preferred Travel Style",
+                diet_label: "Diet / Culinary Preferences", update_btn: "Save Profile", theme_dark: "🌙 Dark", theme_light: "☀️ Light"
             }
         };
 
@@ -244,13 +288,9 @@
             
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                    el.innerText = translations[currentLang][key];
-                }
+                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
             });
         }
-
-        let currentTrip = { city: "Tokyo", lat: 35.6762, lng: 139.6503, dates: "10 au 20 Juillet 2026", travelers: 2 };
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
@@ -261,7 +301,7 @@
                 isPlaying = false;
             } else {
                 audio.play();
-                btn.innerText = currentLang === 'fr' ? "Pause ⏸" : "Pause ⏸";
+                btn.innerText = "Pause ⏸";
                 isPlaying = true;
             }
         }
@@ -272,7 +312,7 @@
             
             document.getElementById('tab-' + tabName).classList.add('active');
             
-            const btnMap = { 'accueil': 'nav-home', 'nouveau': 'nav-trip', 'carte': 'nav-map', 'plan': 'nav-todo', 'profil': 'nav-profile' };
+            const btnMap = { 'accueil': 'nav-home', 'nouveau': 'nav-trip', 'carte': 'nav-map', 'restaurants': 'nav-resto', 'plan': 'nav-todo', 'profil': 'nav-profile' };
             const targetBtn = document.getElementById(btnMap[tabName]);
             if (targetBtn) targetBtn.classList.add('active');
 
@@ -280,22 +320,21 @@
                 setTimeout(() => {
                     if (!map) {
                         map = L.map('map').setView([currentTrip.lat, currentTrip.lng], 13);
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            maxZoom: 19,
-                            attribution: '© OpenStreetMap'
-                        }).addTo(map);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
                     } else {
                         map.setView([currentTrip.lat, currentTrip.lng], 13);
                     }
                     generateGuaranteedHotels(currentTrip.lat, currentTrip.lng);
                     map.invalidateSize();
                 }, 250);
+            } else if (tabName === 'restaurants') {
+                loadRestaurantsByDiet();
             }
         }
 
         function searchWorldDestination() {
             const query = document.getElementById('world-destination').value.trim();
-            if(!query) return alert(currentLang === 'fr' ? 'Veuillez entrer une destination.' : 'Please enter a destination.');
+            if(!query) return alert('Destination requise.');
 
             fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
                 .then(res => res.json())
@@ -307,16 +346,43 @@
                         currentTrip.dates = document.getElementById('trip-dates').value;
                         currentTrip.travelers = document.getElementById('trip-travelers').value;
 
-                        document.getElementById('current-trip-title').innerText = `${currentTrip.city} • ${currentLang === 'fr' ? 'Voyage Programmé' : 'Planned Trip'}`;
-                        document.getElementById('current-trip-details').innerText = `${currentTrip.travelers} ${currentLang === 'fr' ? 'voyageurs' : 'travelers'} • ${currentTrip.dates}`;
-
-                        alert(currentLang === 'fr' ? `Destination ${currentTrip.city} trouvée !` : `Destination ${currentTrip.city} found!`);
-                        switchTab('carte');
+                        document.getElementById('current-trip-title').innerText = `${currentTrip.city} • Voyage Programmé`;
+                        alert(`Destination ${currentTrip.city} enregistrée !`);
+                        switchTab('restaurants');
                     } else {
-                        alert(currentLang === 'fr' ? 'Destination introuvable.' : 'Destination not found.');
+                        alert('Destination introuvable.');
                     }
-                })
-                .catch(() => alert('Erreur.'));
+                });
+        }
+
+        function loadRestaurantsByDiet() {
+            const container = document.getElementById('restaurants-list');
+            document.getElementById('resto-guide-title').innerText = `🍽️ Restos à ${currentTrip.city}`;
+            document.getElementById('resto-filter-info').innerText = `Régime actif : ${userProfile.diet}`;
+
+            // Exemple de base de restaurants filtrés dynamiquement selon le régime du profil
+            let sampleRestos = [
+                { name: "L'Étoile Gourmande", type: "Gastronomique", rating: "⭐ 4.9", diet: "Gastronomique", dist: "À 300m" },
+                { name: "Green Garden Bio", type: "100% Végétarien", rating: "⭐ 4.8", diet: "Végétarien", dist: "À 500m" },
+                { name: "Pure & Gluten-Free", type: "Sans Gluten Certified", rating: "⭐ 4.7", diet: "Sans gluten", dist: "À 700m" },
+                { name: "Le Medina Halal", type: "Cuisine Traditionnelle", rating: "⭐ 4.9", diet: "Halal", dist: "À 400m" },
+                { name: "Café de la Ville", type: "Brasserie & Lounge", rating: "⭐ 4.6", diet: "Tous", dist: "À 200m" }
+            ];
+
+            let filtered = sampleRestos.filter(r => userProfile.diet === 'Tous' || r.diet === userProfile.diet || r.diet === 'Tous');
+
+            container.innerHTML = filtered.map(r => `
+                <div class="restaurant-item">
+                    <div>
+                        <h4 style="color:var(--text-color); margin-bottom:3px;">${r.name}</h4>
+                        <p style="color:var(--muted); font-size:0.82rem;">${r.type} • ${r.dist}</p>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="font-weight:700; color:var(--primary);">${r.rating}</span><br>
+                        <button class="control-btn" style="margin-top:6px;" onclick="alert('Réservation ou itinéraire ouvert pour ${r.name}')">Y aller</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function generateGuaranteedHotels(lat, lng) {
@@ -324,34 +390,36 @@
             if (markersLayer) map.removeLayer(markersLayer);
             markersLayer = L.layerGroup().addTo(map);
 
-            // Marqueur du centre de la ville
             L.marker([lat, lng]).addTo(markersLayer).bindPopup(`<b>📍 ${currentTrip.city} Center</b>`).openPopup();
 
-            // Génération garantie de 4 superbes hébergements autour des coordonnées recherchées
             const offsets = [
-                { dLat: 0.008, dLng: 0.006, name: `Grand Luxury Hotel & Spa`, type: "Hôtel 5★", price: "180€ / nuit" },
-                { dLat: -0.006, dLng: 0.009, name: `Chic Design Loft (Airbnb)`, type: "Airbnb", price: "110€ / nuit" },
-                { dLat: 0.005, dLng: -0.008, name: `Boutique Hotel & Rooftop`, type: "Hôtel 4★", price: "140€ / nuit" },
-                { dLat: -0.007, dLng: -0.006, name: `Cosy Historic Apartment`, type: "Airbnb", price: "85€ / nuit" }
+                { dLat: 0.008, dLng: 0.006, name: `Grand Luxury Hotel & Spa`, price: "180€ / nuit" },
+                { dLat: -0.006, dLng: 0.009, name: `Chic Design Loft (Airbnb)`, price: "110€ / nuit" }
             ];
 
             offsets.forEach(h => {
-                const hLat = lat + h.dLat;
-                const hLng = lng + h.dLng;
-                L.marker([hLat, hLng]).addTo(markersLayer)
-                    .bindPopup(`<b>🏨 ${h.name}</b><br>⭐ 4.9 • ${h.type}<br><b>${h.price}</b><br><br><button class="btn" style="padding:6px 10px; margin-top:5px; font-size:0.8rem;" onclick="addFavorite('${h.name}', '${h.price}')">⭐ ${currentLang === 'fr' ? 'Ajouter aux favoris' : 'Add to favorites'}</button>`);
+                L.marker([lat + h.dLat, lng + h.dLng]).addTo(markersLayer)
+                    .bindPopup(`<b>🏨 ${h.name}</b><br>${h.price}<br><br><button class="btn" style="padding:5px 8px;" onclick="addFavorite('${h.name}', '${h.price}')">⭐ Favoris</button>`);
             });
         }
 
         function addFavorite(name, price) {
-            const itemText = `${name} (${price})`;
-            if (!favorites.includes(itemText)) {
-                favorites.push(itemText);
+            const item = `${name} (${price})`;
+            if (!favorites.includes(item)) {
+                favorites.push(item);
                 document.getElementById('favorites-list').innerHTML = favorites.map(f => `<li>✨ ${f}</li>`).join('');
-                alert(currentLang === 'fr' ? 'Ajouté aux favoris avec succès !' : 'Successfully added to favorites!');
-            } else {
-                alert(currentLang === 'fr' ? 'Cet établissement est déjà dans vos favoris.' : 'This property is already in your favorites.');
+                alert('Ajouté aux favoris !');
             }
+        }
+
+        function updateProfile() {
+            userProfile.name = document.getElementById('user-name-input').value;
+            userProfile.age = document.getElementById('user-age-input').value;
+            userProfile.travelStyle = document.getElementById('user-travel-style').value;
+            userProfile.diet = document.getElementById('user-diet').value;
+
+            document.getElementById('user-initial').innerText = userProfile.name.charAt(0).toUpperCase();
+            alert(`Profil de ${userProfile.name} (${userProfile.age} ans) mis à jour avec succès !\nPréférence culinaire enregistrée : ${userProfile.diet}`);
         }
 
         function addTask() {
@@ -373,14 +441,6 @@
                 document.getElementById('balance-display').innerText = `${name} : ${amount}€`;
                 document.getElementById('expense-name').value = '';
                 document.getElementById('expense-amount').value = '';
-            }
-        }
-
-        function updateProfile() {
-            const name = document.getElementById('user-name-input').value;
-            if(name) {
-                document.getElementById('user-initial').innerText = name.charAt(0).toUpperCase();
-                alert(currentLang === 'fr' ? 'Profil mis à jour !' : 'Profile updated!');
             }
         }
     </script>
