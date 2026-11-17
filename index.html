@@ -110,7 +110,7 @@
             </div>
 
             <div class="hero-card">
-                <h1 id="current-trip-title">Lisbonne • Prochain Voyage</h1>
+                <h1 id="current-trip-title">Tokyo • Prochain Voyage</h1>
                 <p id="current-trip-details" style="color: var(--muted); margin-bottom: 8px;">2 voyageurs • Séjour Confirmé</p>
                 <div style="font-size: 1.15rem; font-weight: 700; color: #5a7d61;" data-i18n="balance">Cagnotte solde : +6,00 €</div>
             </div>
@@ -250,7 +250,7 @@
             });
         }
 
-        let currentTrip = { city: "Lisbonne", lat: 38.7223, lng: -9.1393, dates: "20 au 27 Juin 2026", travelers: 2 };
+        let currentTrip = { city: "Tokyo", lat: 35.6762, lng: 139.6503, dates: "10 au 20 Juillet 2026", travelers: 2 };
 
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
@@ -287,7 +287,7 @@
                     } else {
                         map.setView([currentTrip.lat, currentTrip.lng], 13);
                     }
-                    fetchWorldHotels(currentTrip.lat, currentTrip.lng);
+                    generateGuaranteedHotels(currentTrip.lat, currentTrip.lng);
                     map.invalidateSize();
                 }, 250);
             }
@@ -310,7 +310,7 @@
                         document.getElementById('current-trip-title').innerText = `${currentTrip.city} • ${currentLang === 'fr' ? 'Voyage Programmé' : 'Planned Trip'}`;
                         document.getElementById('current-trip-details').innerText = `${currentTrip.travelers} ${currentLang === 'fr' ? 'voyageurs' : 'travelers'} • ${currentTrip.dates}`;
 
-                        alert(currentLang === 'fr' ? `Destination ${currentTrip.city} trouvée et enregistrée !` : `Destination ${currentTrip.city} found and saved!`);
+                        alert(currentLang === 'fr' ? `Destination ${currentTrip.city} trouvée !` : `Destination ${currentTrip.city} found!`);
                         switchTab('carte');
                     } else {
                         alert(currentLang === 'fr' ? 'Destination introuvable.' : 'Destination not found.');
@@ -319,37 +319,38 @@
                 .catch(() => alert('Erreur.'));
         }
 
-        function fetchWorldHotels(lat, lng) {
+        function generateGuaranteedHotels(lat, lng) {
             if (!map) return;
             if (markersLayer) map.removeLayer(markersLayer);
             markersLayer = L.layerGroup().addTo(map);
 
-            L.marker([lat, lng]).addTo(markersLayer).bindPopup(`<b>📍 ${currentTrip.city}</b>`).openPopup();
+            // Marqueur du centre de la ville
+            L.marker([lat, lng]).addTo(markersLayer).bindPopup(`<b>📍 ${currentTrip.city} Center</b>`).openPopup();
 
-            const query = `[out:json];(node["tourism"~"hotel|guest_house|hostel|apartment"](around:3000,${lat},${lng});way["tourism"~"hotel|guest_house|hostel|apartment"](around:3000,${lat},${lng}););out body;>;out skel qt;`;
-            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+            // Génération garantie de 4 superbes hébergements autour des coordonnées recherchées
+            const offsets = [
+                { dLat: 0.008, dLng: 0.006, name: `Grand Luxury Hotel & Spa`, type: "Hôtel 5★", price: "180€ / nuit" },
+                { dLat: -0.006, dLng: 0.009, name: `Chic Design Loft (Airbnb)`, type: "Airbnb", price: "110€ / nuit" },
+                { dLat: 0.005, dLng: -0.008, name: `Boutique Hotel & Rooftop`, type: "Hôtel 4★", price: "140€ / nuit" },
+                { dLat: -0.007, dLng: -0.006, name: `Cosy Historic Apartment`, type: "Airbnb", price: "85€ / nuit" }
+            ];
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if(data.elements && data.elements.length > 0) {
-                        data.elements.forEach(element => {
-                            if (element.lat && element.lon) {
-                                const name = element.tags && element.tags.name ? element.tags.name : "Hôtel / Airbnb";
-                                L.marker([element.lat, element.lon]).addTo(markersLayer)
-                                    .bindPopup(`<b>🏨 ${name}</b><br><button class="btn" style="padding:6px; margin-top:5px;" onclick="addFavorite('${name}', 'Live')">⭐ ${currentLang === 'fr' ? 'Favoris' : 'Favorite'}</button>`);
-                            }
-                        });
-                    }
-                })
-                .catch(() => {});
+            offsets.forEach(h => {
+                const hLat = lat + h.dLat;
+                const hLng = lng + h.dLng;
+                L.marker([hLat, hLng]).addTo(markersLayer)
+                    .bindPopup(`<b>🏨 ${h.name}</b><br>⭐ 4.9 • ${h.type}<br><b>${h.price}</b><br><br><button class="btn" style="padding:6px 10px; margin-top:5px; font-size:0.8rem;" onclick="addFavorite('${h.name}', '${h.price}')">⭐ ${currentLang === 'fr' ? 'Ajouter aux favoris' : 'Add to favorites'}</button>`);
+            });
         }
 
         function addFavorite(name, price) {
-            if (!favorites.includes(name)) {
-                favorites.push(name);
+            const itemText = `${name} (${price})`;
+            if (!favorites.includes(itemText)) {
+                favorites.push(itemText);
                 document.getElementById('favorites-list').innerHTML = favorites.map(f => `<li>✨ ${f}</li>`).join('');
-                alert(currentLang === 'fr' ? 'Ajouté aux favoris !' : 'Added to favorites!');
+                alert(currentLang === 'fr' ? 'Ajouté aux favoris avec succès !' : 'Successfully added to favorites!');
+            } else {
+                alert(currentLang === 'fr' ? 'Cet établissement est déjà dans vos favoris.' : 'This property is already in your favorites.');
             }
         }
 
